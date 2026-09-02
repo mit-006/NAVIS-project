@@ -186,7 +186,7 @@ Actionable Decision Support
 Interactive GIS Dashboard
 ```
 
-##Project Structure
+### Project Structure
 ```text
 NAVIS/
 │
