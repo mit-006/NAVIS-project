@@ -216,6 +216,11 @@ NAVIS/
 │
 └── README.md
 
+
+
+
+
+
 ## Actionable Decision Support
 
 NAVIS connects hazard and vulnerability assessment with relocation planning to support practical disaster-management decisions.
