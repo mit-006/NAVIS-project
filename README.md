@@ -1,259 +1,301 @@
-# NAVIS - A GIS based Disaster Management Decision Support Platform
+# NAVIS
+### Natural Hazard Assessment & Vulnerability Intelligence System
 
-**[Live Demo] : [https://navisweb.vercel.app/]**
+**Live Demo:** https://frontend-seven-bice-roz217pfff.vercel.app/
 
-## Project Purpose
+**GitHub Repository:** https://github.com/khushivadgama/NAVIS---Natural-hazard-Assesment-Vulnerability-Intelligence-System
 
-NAVIS is an intelligent GIS-based disaster-management decision-support platform designed to:
+---
 
-- Identify hazard-based Red Zones using explainable mathematical weighted-risk models
-- Assess relocation-site carrying capacity
-- Prioritize vulnerable habitations for relocation
-- Recommend safer evacuation routes
+## Project Description
 
-This repository contains the **prototype** for a selected high-risk pilot region. The architecture is designed to scale to multiple districts/states later.
+NAVIS is a GIS-based multi-hazard risk assessment and relocation decision-support platform designed to help disaster management authorities identify vulnerable habitations, analyze hazard exposure, prioritize high-risk areas, and evaluate suitable relocation options.
 
-## Architecture Overview
+The platform integrates geospatial datasets, historical hazard information, population vulnerability, terrain characteristics, accessibility, and explainable weighted scoring to transform complex geographic data into actionable disaster-management insights.
 
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│    Frontend     │────▶│    Backend      │────▶│  Python Engine  │
-│  (React/Vite)   │     │  (Node/Express) │     │  (FastAPI/GIS)  │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                              │                        │
-                              ▼                        ▼
-                        ┌───────────┐           ┌───────────┐
-                        │  MongoDB  │           │   Data    │
-                        └───────────┘           └───────────┘
-```
+NAVIS focuses on the complete decision-support workflow:
 
-### Data Flow
+**Identify Risk → Assess Vulnerability → Prioritize Habitations → Evaluate Relocation Sites → Support Relocation Decisions**
 
-1. **Frontend** sends user requests and displays results
-2. **Backend** orchestrates data flow, handles API requests
-3. **Python Engine** performs GIS processing and risk calculations
-4. **MongoDB** stores processed data, configurations, and results
-5. **Data Directory** holds static and sample datasets
+---
+
+## Key Features
+
+- Multi-hazard risk assessment and visualization
+- Historical flood exposure analysis
+- Habitation-level risk and vulnerability analysis
+- Population exposure assessment
+- Risk-based habitation prioritization
+- Explainable weighted scoring model
+- Interactive GIS-based hazard maps
+- Habitation explorer with detailed information
+- Historical hazard analysis and visualization
+- Relocation site identification
+- Relocation site suitability assessment
+- Elevation and slope-based site analysis
+- Road accessibility analysis
+- Alternative relocation site comparison
+- Relocation route visualization
+- Actionable decision-support for relocation planning
+- Real-time flood situational awareness using official data sources
+- Interactive charts and analytical dashboards
+- Responsive desktop and mobile interface
+- Emergency demonstration/simulation mode
+
+---
 
 ## Technology Stack
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| Frontend | React 18, Vite, Tailwind CSS | UI framework and styling |
-| Maps | Leaflet, React-Leaflet | Interactive GIS mapping |
-| Backend | Node.js, Express.js | API server, orchestration |
-| Risk Engine | Python, FastAPI | GIS processing, risk calculation |
-| GIS Libraries | GeoPandas, Shapely, Rasterio | Spatial data processing |
-| Database | MongoDB | Data storage |
-| Routing | OSRM | Evacuation route generation |
-| Base Maps | OpenStreetMap | Reference mapping |
+### Frontend
 
-## Project Structure
+- React.js
+- Vite
+- Tailwind CSS
+- React Leaflet
+- Leaflet
+- Recharts
+- React Router
 
-```
-resqmap/
-├── frontend/               # React application
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Page components
-│   │   ├── services/       # API client services
-│   │   ├── App.jsx         # Main app component
-│   │   ├── main.jsx        # Entry point
-│   │   └── index.css       # Global styles
-│   ├── public/             # Static assets
-│   ├── package.json        # Frontend dependencies
-│   └── vite.config.js      # Vite configuration
-│
-├── backend/                # Node.js API server
-│   ├── src/
-│   │   ├── routes/         # Express route handlers
-│   │   ├── controllers/    # Business logic
-│   │   ├── services/       # External service integrations
-│   │   ├── config/         # Configuration management
-│   │   └── index.js        # Server entry point
-│   └── package.json        # Backend dependencies
-│
-├── python-engine/          # Python GIS/Risk engine
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── main.py         # FastAPI application
-│   │   └── config.py       # Configuration
-│   ├── data/               # Engine-specific data
-│   └── requirements.txt    # Python dependencies
-│
-├── data/                   # Shared data directory
-│   ├── raw/                # Raw, unprocessed source datasets
-│   ├── sample/             # Sample/mock data
-│   └── templates/          # Data templates
-│
-├── docs/                   # Documentation
-├── .gitignore              # Git ignore rules
-└── README.md               # This file
-```
+### Backend
 
-## Core Modules (Planned)
+- Node.js
+- Express.js
 
-1. **Data Ingestion & Preprocessing** - Load and validate input data
-2. **Hazard/Risk Assessment** - Analyze hazard layers
-3. **Mathematical Risk Engine** - Weighted risk calculation (explainable, not ML)
-4. **GIS Red-Zone Mapping** - Visualize high-risk areas
-5. **Vulnerable Habitation Analysis** - Identify at-risk communities
-6. **Relocation Priority Classification** - Rank relocation needs
-7. **Relocation-Site Assessment** - Evaluate safe locations
-8. **Carrying-Capacity Assessment** - Determine site capacity
-9. **Safe-Route Generation** - Calculate evacuation paths
-10. **Government/Admin Dashboard** - Decision-support interface
+### Geospatial & Data Processing
+
+- Python
+- GeoPandas
+- Shapely
+- Rasterio
+- PyProj
+- Pandas
+- NumPy
+
+### GIS Analysis
+
+- Spatial Intersection
+- Spatial Overlay
+- Buffer Analysis
+- Proximity Analysis
+- Elevation Analysis
+- Slope Analysis
+- Historical Flood Exposure Analysis
+- Population Exposure Analysis
+
+---
+
+## Decision Model
+
+NAVIS uses an explainable mathematical weighted scoring approach for risk prioritization.
+
+### Flood Priority Score
+
+The current flood-priority model considers:
+
+- Maximum Exposure — 40%
+- Flood Frequency — 30%
+- Population Exposure — 30%
+
+### Relocation Suitability
+
+Potential relocation sites are evaluated using factors including:
+
+- Elevation
+- Slope
+- Road Accessibility
+- Available Amenities
+- Vulnerable Population Proximity
+
+The scoring approach is designed to remain transparent and interpretable rather than relying on a black-box decision model.
+
+---
 
 ## Data Sources
 
-### Ingested Datasets
+NAVIS integrates and processes data from multiple geospatial and government-linked sources, including:
 
-| Dataset | Region | Status | Location |
-|---------|--------|--------|----------|
-| Census 2011 PCA-TV | Kamrup Metropolitan, Assam | Raw / Unprocessed | `data/raw/kamrup_metropolitan_pca_tv_2011.xlsx` |
-| NWIC Village Boundaries | Assam | Raw / Incompatible codes | `data/raw/nwic_assam_village_boundary/` |
-| Village Code Reference | All India | Verified | `data/raw/assam_village_codes.csv` |
+- Census India 2011
+- AIKOSH
+- NDEM / NRSC / ISRO
+- SRTM Digital Elevation Model
+- OpenStreetMap
+- National Water Data Portal (NWIC)
+- Central Water Commission (CWC)
+- Assam State Disaster Management Authority (ASDMA)
 
-### Pending Downloads
+---
 
-| Dataset | Region | Status | Download Source |
-|---------|--------|--------|-----------------|
-| PC11 Village Polygons (SHRUG) | All India | **Awaiting manual download** | [AIKOSH](https://aikosh.indiaai.gov.in/home/datasets/details/2011_population_census_village_level_geometries.html) or [DDL](https://www.devdatalab.org/shrug_download) |
+## Study Area
 
-**Census 2011 PCA-TV Details:**
-- **Full Name**: Primary Census Abstract at Town, Village and Ward Level (PCA-TV)
-- **Source**: Office of the Registrar General & Census Commissioner, India
-- **Data Type**: Demographic / Population
-- **Purpose**: Baseline population and habitation data for vulnerability assessment
-- **Note**: This dataset does not contain GIS geometry (latitude/longitude). Spatial data must be obtained from separate Census shapefiles or Survey of India sources.
-- **Village codes**: 6-digit codes (e.g., 303398) — verified to match across sources
+The current implementation focuses on:
 
-**PC11 Village Polygons (SHRUG/AIKOSH) Details:**
-- **Full Name**: 2011 Population Census Village-Level Geometries
-- **Source**: Development Data Lab (SHRUG) via AIKOSH platform
-- **Data Type**: GIS Polygon Geometry
-- **Purpose**: Village boundary polygons for mapping Census data
-- **License**: CC BY-NC-SA 4.0 (non-commercial use only)
-- **Village ID field**: `pc11_tv_id` — matches Census `Town/Village` codes
-- **Download instructions**: See `docs/data-requirements/aikosh_census_geometry_verification.md`
-- **Inspection script**: `python-engine/scripts/inspect_aikosh_geometry.py`
+**Kamrup Metropolitan District, Assam, India**
 
-## Getting Started
+The validated habitation dataset contains:
 
-### Prerequisites
+**228 habitations**
 
-- Node.js 18+ and npm
-- Python 3.10+
-- MongoDB (local or Atlas)
-- Git
+Historical flood exposure analysis currently covers:
 
-### Installation
+- 1998
+- 1999
+- 2004
+- 2012
+- 2013
 
-```bash
-# Clone the repository
-git clone <repository-url>
-cd resqmap
+Current processed results include:
 
-# Install frontend dependencies
-cd frontend
-npm install
+- Total Habitations: 228
+- Exposed Habitations: 152
+- Historical Exposure: 66.7%
+- Relocation Candidates: 76
 
-# Install backend dependencies
-cd ../backend
-npm install
+### Historical Flood Exposure
 
-# Install Python dependencies
-cd ../python-engine
-python -m venv venv
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
+| Year | Exposed Habitations |
+|------|---------------------|
+| 1998 | 129 |
+| 1999 | 131 |
+| 2004 | 125 |
+| 2012 | 102 |
+| 2013 | 82 |
 
-pip install -r requirements.txt
-```
+---
 
-### Environment Setup
+## System Workflow
 
-```bash
-# Backend
-cp backend/.env.example backend/.env
-# Edit backend/.env with your MongoDB URI
+```text
+Multi-Source Data
+        ↓
+Data Processing & Validation
+        ↓
+GIS Spatial Analysis
+        ↓
+Hazard & Exposure Assessment
+        ↓
+Population & Vulnerability Analysis
+        ↓
+Weighted Risk Scoring
+        ↓
+Habitation Prioritization
+        ↓
+Relocation Suitability Analysis
+        ↓
+Actionable Decision Support
+        ↓
+Interactive GIS Dashboard
 
-# Python Engine
-cp python-engine/.env.example python-engine/.env
-```
+##Project Structure
+NAVIS/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── data/
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   └── ...
+│   ├── public/
+│   └── package.json
+│
+├── backend/
+│   ├── src/
+│   │   ├── routes/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── config/
+│   │   └── index.js
+│   └── package.json
+│
+├── python-engine/
+│   └── phase3_candidate_analysis.py
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+└── README.md
 
-### Running the Services
+Actionable Decision Support
 
-Open three terminals and run:
+NAVIS connects risk assessment with relocation planning.
 
-**Terminal 1 - Frontend:**
-```bash
-cd frontend
-npm run dev
-# Runs on http://localhost:5173
-```
+For a selected habitation, the platform can provide:
 
-**Terminal 2 - Backend:**
-```bash
-cd backend
-npm run dev
-# Runs on http://localhost:3000
-```
+Assessed hazard exposure
+Historical risk information
+Vulnerability indicators
+Priority level
+Recommended action
+Suitable relocation site
+Alternative relocation sites
+Accessibility information
+Route visualization where reliable routing data is available
 
-**Terminal 3 - Python Engine:**
-```bash
-cd python-engine
-# Activate virtual environment first
-uvicorn app.main:app --reload --port 8000
-# Runs on http://localhost:8000
-# API docs at http://localhost:8000/docs
-```
+Recommendations are generated from the available data and analytical models and are intended to support, not replace, decisions made by authorized disaster-management authorities.
 
-## API Endpoints
+Real-Time Flood Situational Awareness
 
-### Backend (Port 3000)
+NAVIS supports integration of official real-time environmental information, including:
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/health | Health check |
-| GET | /api/risk/:regionId | Get risk assessment |
-| GET | /api/redzones | Get red zones data |
-| GET | /api/relocationsites | Get relocation sites |
+River water level
+River-level trend
+Recent rainfall
+Current monitoring status
+Last updated information
+Data source
 
-### Python Engine (Port 8000)
+Real-time information is intended for situational awareness and does not represent a guaranteed prediction of future flooding.
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /health | Health check |
-| GET | /docs | API documentation |
+**GIS Capabilities**
 
-## Development Guidelines
+The platform performs geospatial analysis including:
 
-### Code Principles
+Spatial intersection
+Spatial overlay
+Buffer and proximity analysis
+Terrain analysis
+Elevation extraction
+Slope analysis
+Historical hazard exposure analysis
+Population exposure analysis
+Relocation site suitability analysis
 
-- **Modular Design**: Each service is independently maintainable
-- **Explainable Models**: Risk calculations use transparent mathematical models
-- **No Fake Data**: Never claim data is real unless verified
-- **No Hardcoded Thresholds**: All hazard parameters are configurable
-- **No ML at This Stage**: Focus on mathematical weighted-risk models
+These operations convert raw geographic datasets into habitation-level analytical outputs.
 
-### Data Handling
+**Validation**
 
-- **Static Data**: Elevation, slope, population, historical disasters, infrastructure
-- **Dynamic Data**: Weather/rainfall, river levels (auto-fetched via APIs in future)
-- **Mock Data**: Use sample data for development, clearly labeled
+The current application has been tested across multiple screen sizes:
 
-## Next Steps (Planned)
+1440 × 900
+768 × 1024
+390 × 844
+360 × 800
 
-1. Implement MongoDB connection and data models
-2. Build data ingestion pipeline for sample datasets
-3. Create risk calculation endpoints in Python engine
-4. Implement Red-Zone visualization layer
-5. Add habitation analysis and vulnerability scoring
-6. Build relocation site assessment
-7. Implement OSRM-based route generation
-8. Complete dashboard with all layers and controls
+Current validation results:
 
+28 / 28 browser checks passed
+0 horizontal overflow issues
+0 console errors
+Production build passed
+
+**Project Status**
+
+Status: Active Development
+
+Platform: Web-based GIS Decision Support System
+
+Study Area: Kamrup Metropolitan, Assam
+
+Focus: Multi-Hazard Risk Assessment and Relocation Decision Support
+
+**Disclaimer**
+
+NAVIS is developed for research, educational, demonstration, and decision-support purposes.
+
+The information and recommendations generated by the platform are based on available datasets, analytical models, and predefined criteria.
+
+NAVIS does not provide official evacuation orders, emergency warnings, or guaranteed predictions of future natural disasters.
+
+Final decisions regarding evacuation, relocation, or emergency response must be taken by authorized disaster-management authorities using verified real-time information and appropriate field-level assessment.
 
