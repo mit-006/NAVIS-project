@@ -1,8 +1,8 @@
-# ResQMap - Disaster Management Decision Support Platform
+# NAVIS - A GIS based Disaster Management Decision Support Platform
 
 ## Project Purpose
 
-ResQMap is an intelligent GIS-based disaster-management decision-support platform designed to:
+NAVIS is an intelligent GIS-based disaster-management decision-support platform designed to:
 
 - Identify hazard-based Red Zones using explainable mathematical weighted-risk models
 - Assess relocation-site carrying capacity
