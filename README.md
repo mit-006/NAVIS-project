@@ -184,8 +184,10 @@ Relocation Suitability Analysis
 Actionable Decision Support
         ↓
 Interactive GIS Dashboard
+```
 
 ##Project Structure
+```text
 NAVIS/
 │
 ├── frontend/
