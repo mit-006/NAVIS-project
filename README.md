@@ -1,5 +1,7 @@
 # NAVIS - A GIS based Disaster Management Decision Support Platform
 
+** [Live Demo] : [https://navisweb.vercel.app/]
+
 ## Project Purpose
 
 NAVIS is an intelligent GIS-based disaster-management decision-support platform designed to:
@@ -254,10 +256,4 @@ uvicorn app.main:app --reload --port 8000
 7. Implement OSRM-based route generation
 8. Complete dashboard with all layers and controls
 
-## License
 
-[Add license here]
-
-## Contributing
-
-[Add contribution guidelines here]
