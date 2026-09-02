@@ -1,7 +1,7 @@
 # NAVIS
 ### Natural Hazard Assessment & Vulnerability Intelligence System
 
-**Live Demo:** https://frontend-seven-bice-roz217pfff.vercel.app/
+**Live Demo:** [https://navisweb.vercel.app/]
 
 **GitHub Repository:** https://github.com/khushivadgama/NAVIS---Natural-hazard-Assesment-Vulnerability-Intelligence-System
 
