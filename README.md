@@ -1,6 +1,6 @@
 # NAVIS - A GIS based Disaster Management Decision Support Platform
 
-** [Live Demo] : [https://navisweb.vercel.app/]
+**[Live Demo] : [https://navisweb.vercel.app/]**
 
 ## Project Purpose
 
