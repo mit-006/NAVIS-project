@@ -2,11 +2,11 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { HashRouter as Router, Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import { loadFloodData, computeAllYearStats } from './data/floodData';
 import { loadRelocationData } from './data/relocationData';
-import { initAssistant } from './services/resqAssistant';
+import { initAssistant } from './services/navisAssistant';
 import { DemoModeProvider } from './demo/DemoModeContext';
 import DemoModeToggle from './components/DemoModeToggle';
 import DemoBanner from './components/DemoBanner';
-import ResQAssistant from './components/ResQAssistant';
+import NavisAssistant from './components/NavisAssistant';
 import Overview from './pages/Overview';
 import FloodMap from './pages/FloodMap';
 import HistoricalAnalysis from './pages/HistoricalAnalysis';
@@ -65,7 +65,7 @@ function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [dark, setDark] = useState(() => {
-    const saved = localStorage.getItem('resqmap-theme');
+    const saved = localStorage.getItem('navis-theme');
     if (saved) return saved === 'dark';
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
@@ -79,7 +79,7 @@ function AppLayout() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('resqmap-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('navis-theme', dark ? 'dark' : 'light');
     document.documentElement.classList.toggle('dark', dark);
   }, [dark]);
 
@@ -144,7 +144,7 @@ function AppLayout() {
           </svg>
         </button>
 
-        <img src="/assets/resqmap-logo.png" alt="NAVIS" className="h-8 w-auto flex-shrink-0" />
+        <img src="/assets/navis-logo.png" alt="NAVIS" className="h-8 w-auto flex-shrink-0" />
         <div className="flex-1 min-w-0">
           <h1 className="text-sm md:text-base font-bold tracking-tight leading-none">NAVIS</h1>
           <p className="text-[9px] md:text-[10px] text-slate-400 tracking-wide uppercase hidden sm:block">Natural-hazard Assessment & Vulnerability Intelligence System</p>
@@ -270,7 +270,7 @@ function AppLayout() {
           </Routes>
         </main>
       </div>
-      <ResQAssistant />
+      <NavisAssistant />
     </div>
   );
 }

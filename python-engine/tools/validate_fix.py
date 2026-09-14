@@ -1,6 +1,6 @@
 import json, hashlib, os
 
-BASE = r"C:\Users\DELL\OneDrive\Documents\Default Project\resqmap"
+BASE = r"C:\Users\DELL\OneDrive\Documents\Default Project\navis"
 
 # 1. Verify GeoJSON unchanged
 geojson_path = os.path.join(BASE, 'data', 'processed', 'kamrup_metro_flood_exposure.geojson')

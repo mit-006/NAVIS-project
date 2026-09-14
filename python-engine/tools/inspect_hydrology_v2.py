@@ -43,7 +43,7 @@ def is_in_bbox(lat, lon):
 print("=" * 60)
 print("RE-CHECK: GWL")
 print("=" * 60)
-path_gwl = r"C:\Users\DELL\OneDrive\Documents\Default Project\resqmap\data\raw\hydrology\gwl_tel_6_hourly_assam_2026_2030.csv"
+path_gwl = r"C:\Users\DELL\OneDrive\Documents\Default Project\navis\data\raw\hydrology\gwl_tel_6_hourly_assam_2026_2030.csv"
 cols_gwl, rows_gwl = read_csv(path_gwl)
 print(f"Columns: {len(cols_gwl)}")
 print(f"Records: {len(rows_gwl)}")
@@ -62,7 +62,7 @@ print()
 print("=" * 60)
 print("RE-CHECK: RAINFALL MANUAL DAILY")
 print("=" * 60)
-path_rf = r"C:\Users\DELL\OneDrive\Documents\Default Project\resqmap\data\raw\hydrology\rainfall_manual_daily_assam_2026_2030.csv"
+path_rf = r"C:\Users\DELL\OneDrive\Documents\Default Project\navis\data\raw\hydrology\rainfall_manual_daily_assam_2026_2030.csv"
 cols_rf, rows_rf = read_csv(path_rf)
 print(f"Columns: {len(cols_rf)}")
 print(f"Records: {len(rows_rf)}")
@@ -80,7 +80,7 @@ print()
 print("=" * 60)
 print("RE-CHECK: RAINFALL TELEMETRY HOURLY")
 print("=" * 60)
-path_rft = r"C:\Users\DELL\OneDrive\Documents\Default Project\resqmap\data\raw\hydrology\rainfall_tel_hr_assam_2026_2030.csv"
+path_rft = r"C:\Users\DELL\OneDrive\Documents\Default Project\navis\data\raw\hydrology\rainfall_tel_hr_assam_2026_2030.csv"
 cols_rft, rows_rft = read_csv(path_rft)
 print(f"Columns: {len(cols_rft)}, Records: {len(rows_rft)}")
 
@@ -163,7 +163,7 @@ print()
 print("=" * 60)
 print("RE-CHECK: RIVER WATER LEVEL")
 print("=" * 60)
-path_rwl = r"C:\Users\DELL\OneDrive\Documents\Default Project\resqmap\data\raw\hydrology\rwl_tel_hr_assam_2026_2030.csv"
+path_rwl = r"C:\Users\DELL\OneDrive\Documents\Default Project\navis\data\raw\hydrology\rwl_tel_hr_assam_2026_2030.csv"
 cols_rwl, rows_rwl = read_csv(path_rwl)
 print(f"Columns: {len(cols_rwl)}, Records: {len(rows_rwl)}")
 print(f"Columns: {cols_rwl}")

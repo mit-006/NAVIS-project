@@ -1,1 +1,1 @@
-"""ResQMap Python Risk/GIS Engine"""
+"""NAVIS Python Risk/GIS Engine"""

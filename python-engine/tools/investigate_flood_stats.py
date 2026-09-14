@@ -4,7 +4,7 @@ BBOX = {"south": 25.9730, "north": 26.3189, "west": 91.5053, "east": 92.2287}
 FLOOD_YEARS = [1998, 1999, 2004, 2012, 2013]
 
 # Load processed GeoJSON
-with open(r"C:\Users\DELL\OneDrive\Documents\Default Project\resqmap\data\processed\kamrup_metro_flood_exposure.geojson", 'r') as f:
+with open(r"C:\Users\DELL\OneDrive\Documents\Default Project\navis\data\processed\kamrup_metro_flood_exposure.geojson", 'r') as f:
     geojson = json.load(f)
 
 features = geojson['features']

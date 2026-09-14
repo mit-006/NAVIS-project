@@ -3,7 +3,7 @@
 
 **Live Demo:** [https://navisweb.vercel.app/]
 
-**GitHub Repository:** https://github.com/khushivadgama/NAVIS---Natural-hazard-Assesment-Vulnerability-Intelligence-System
+**GitHub Repository:** https://github.com/mit-006/NAVIS-project
 
 ---
 
@@ -210,7 +210,11 @@ NAVIS/
 │   └── package.json
 │
 ├── python-engine/
-│   └── phase3_candidate_analysis.py
+│   ├── phase3_candidate_analysis.py
+│   └── tools/          # data inspection / verification scripts
+│
+├── tools/
+│   └── data-prep/       # raw-data preprocessing scripts (census, OSM, flood)
 │
 ├── data/
 │   ├── raw/

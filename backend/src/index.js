@@ -19,6 +19,6 @@ app.use('/api', riskRoutes)
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`ResQMap Backend running on port ${PORT}`)
+  console.log(`NAVIS Backend running on port ${PORT}`)
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
 })

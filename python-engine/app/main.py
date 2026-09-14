@@ -4,8 +4,8 @@ from datetime import datetime
 from .config import PYTHON_ENGINE_PORT
 
 app = FastAPI(
-    title="ResQMap Risk Engine",
-    description="Python-based GIS and risk assessment engine for ResQMap",
+    title="NAVIS Risk Engine",
+    description="Python-based GIS and risk assessment engine for NAVIS",
     version="0.1.0"
 )
 
@@ -22,7 +22,7 @@ app.add_middleware(
 async def health_check():
     return {
         "status": "healthy",
-        "service": "resqmap-python-engine",
+        "service": "navis-python-engine",
         "timestamp": datetime.now().isoformat(),
         "version": "0.1.0"
     }
@@ -30,7 +30,7 @@ async def health_check():
 @app.get("/")
 async def root():
     return {
-        "message": "ResQMap Risk Engine API",
+        "message": "NAVIS Risk Engine API",
         "docs": "/docs",
         "health": "/health"
     }

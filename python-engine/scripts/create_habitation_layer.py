@@ -1,5 +1,5 @@
 """
-Create first processed ResQMap GIS habitation layer.
+Create first processed NAVIS GIS habitation layer.
 Joins Census PCA-TV with AIKOSH PC11 village polygons.
 """
 import json
@@ -26,7 +26,7 @@ SEP = "=" * 70
 LINE = "-" * 70
 
 print(SEP)
-print("ResQMap Habitation Layer - Census + AIKOSH Join")
+print("NAVIS Habitation Layer - Census + AIKOSH Join")
 print(SEP)
 
 # ── Step 1: Load Census data ──
@@ -224,7 +224,7 @@ print("STEP 7: Creating report...")
 report = f"""# Kamrup Metro Habitation Layer - Processing Report
 
 **Generated**: August 30, 2026
-**Purpose**: First processed ResQMap GIS habitation layer
+**Purpose**: First processed NAVIS GIS habitation layer
 
 ## Input Files
 
@@ -311,7 +311,7 @@ report += f"""
 2. All geometries are valid polygons in WGS84 (EPSG:4326)
 3. No duplicate join keys in output
 4. Raw source files were NOT modified
-5. This is the base habitation layer for ResQMap - hazard data will be added later
+5. This is the base habitation layer for NAVIS - hazard data will be added later
 
 ---
 

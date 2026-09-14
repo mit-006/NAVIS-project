@@ -21,7 +21,7 @@ from shapely.ops import unary_union, nearest_points
 import warnings
 warnings.filterwarnings('ignore')
 
-BASE = 'C:/Users/DELL/OneDrive/Documents/Default Project/resqmap'
+BASE = 'C:/Users/DELL/OneDrive/Documents/Default Project/navis'
 PROCESSED = f'{BASE}/data/processed'
 
 print("=" * 70)
