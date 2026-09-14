@@ -1,9 +1,9 @@
 let cachedData = null;
 
 export const SUITABILITY_LEVELS = [
-  { level: 'High', color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', minScore: 70 },
-  { level: 'Medium', color: '#ca8a04', bg: '#fefce8', border: '#fef08a', minScore: 50 },
-  { level: 'Low', color: '#ea580c', bg: '#fff7ed', border: '#fed7aa', minScore: 0 },
+  { level: 'High', color: '#2F7A63', bg: '#EAF4F1', border: '#A9CFC4', minScore: 70 },
+  { level: 'Medium', color: '#B4841F', bg: '#FBF3E1', border: '#E3CA9C', minScore: 50 },
+  { level: 'Low', color: '#C4632B', bg: '#FCF1E9', border: '#E9C4A9', minScore: 0 },
 ];
 
 export const SCORING_WEIGHTS = [

@@ -86,7 +86,7 @@ export default function Overview({ features, allStats, selectedYear, setSelected
                   <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
                   <span className="text-[10px] font-semibold text-green-300/80 uppercase tracking-[0.15em]">Disaster Intelligence Platform</span>
                 </div>
-                <h1 className="text-xl md:text-2xl lg:text-[1.75rem] font-bold tracking-tight leading-tight">Spatial Risk Overview</h1>
+                <h1 className="text-xl md:text-2xl lg:text-[1.75rem] font-bold tracking-tight leading-tight font-display">Spatial Risk Overview</h1>
                 <p className="text-[13px] md:text-sm text-slate-300/80 mt-2 max-w-xl leading-relaxed">
                   Geospatial assessment of hazard exposure, vulnerable habitations and priority areas across Kamrup Metropolitan, Assam.
                 </p>
@@ -122,7 +122,7 @@ export default function Overview({ features, allStats, selectedYear, setSelected
                 <span className="w-1 h-4 rounded-full" style={{ backgroundColor: kpi.accent }}></span>
                 <p className="text-[10px] md:text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>{kpi.label}</p>
               </div>
-              <p className="text-2xl md:text-[1.75rem] font-bold leading-none" style={{ color: 'var(--text-primary)' }}>{kpi.value}</p>
+              <p className="text-2xl md:text-[1.75rem] font-bold leading-none stat-number" style={{ color: 'var(--text-primary)' }}>{kpi.value}</p>
               <p className="text-[11px] mt-1" style={{ color: 'var(--text-tertiary)' }}>{kpi.sub}</p>
             </div>
           ))}

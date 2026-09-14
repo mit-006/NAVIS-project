@@ -114,7 +114,7 @@ function AppLayout() {
   return (
     <div className="flex flex-col h-screen overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
       {/* Header */}
-      <header className="text-white px-4 md:px-5 py-2 shadow-lg z-[9999] flex-shrink-0 flex items-center gap-3" style={{ background: 'linear-gradient(to right, #0f172a, #1e293b, #0f172a)' }}>
+      <header className="text-white px-4 md:px-5 py-2 shadow-lg z-[9999] flex-shrink-0 flex items-center gap-3" style={{ background: 'linear-gradient(to right, #0A2530, #123642, #0A2530)' }}>
         {/* Mobile hamburger */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -146,7 +146,7 @@ function AppLayout() {
 
         <img src="/assets/navis-logo.png" alt="NAVIS" className="h-8 w-auto flex-shrink-0" />
         <div className="flex-1 min-w-0">
-          <h1 className="text-sm md:text-base font-bold tracking-tight leading-none">NAVIS</h1>
+          <h1 className="text-sm md:text-base font-bold tracking-tight leading-none font-display">NAVIS</h1>
           <p className="text-[9px] md:text-[10px] text-slate-400 tracking-wide uppercase hidden sm:block">Natural-hazard Assessment & Vulnerability Intelligence System</p>
         </div>
         <div className="hidden lg:flex items-center gap-2 text-xs mr-2">
