@@ -19,7 +19,7 @@ YEARS = ['1998', '1999', '2004', '2012', '2013']
 KAMRUP_BBOX = (91.0, 25.5, 92.5, 26.5)
 
 print('='*70)
-print('ResQMap Flood Exposure Calculation')
+print('NAVIS Flood Exposure Calculation')
 print('='*70)
 
 # STEP 1: Load habitation layer

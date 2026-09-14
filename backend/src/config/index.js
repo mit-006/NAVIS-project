@@ -2,8 +2,10 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export const config = {
-  port: process.env.PORT || 3000,
-  mongoUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/resqmap',
+  port: Number(process.env.PORT || 3000),
+  mongoUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/navis',
   pythonEngineUrl: process.env.PYTHON_ENGINE_URL || 'http://localhost:8000',
-  env: process.env.NODE_ENV || 'development'
+  env: process.env.NODE_ENV || 'development',
+  corsOrigins: (process.env.CORS_ORIGINS || 'http://localhost:5173')
+    .split(',').map(origin => origin.trim()).filter(Boolean),
 }

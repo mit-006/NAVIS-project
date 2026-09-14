@@ -89,7 +89,7 @@ export default function DemoMapOverlay() {
           const icon = i === activeSiteIndex ? siteIcon : altSiteIcon;
           const marker = L.marker([s.lat, s.lng], { icon })
             .addTo(map)
-            .bindPopup(`<div style="font-family:system-ui;min-width:140px"><p style="font-weight:700;font-size:11px;color:#13E83A;margin:0">🏠 ${s.name}</p><p style="font-size:9px;color:#64748b;margin:2px 0">Capacity: ${s.capacity.toLocaleString()}</p></div>`);
+            .bindPopup(`<div style="font-family:system-ui;min-width:160px"><p style="font-weight:700;font-size:11px;color:#13E83A;margin:0">🏠 ${s.name}</p><p style="font-size:9px;color:#64748b;margin:2px 0">Candidate ${s.candidateId || 'DEMO'} · ${s.exposedYears ?? '—'} historical flood years</p><p style="font-size:9px;color:#64748b;margin:2px 0">Capacity: ${s.capacity.toLocaleString()} · Elevation: ${s.elevation}m</p></div>`);
           markersRef.current.push(marker);
           allPts.push([s.lat, s.lng]);
         });

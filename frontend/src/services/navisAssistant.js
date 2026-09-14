@@ -104,18 +104,22 @@ const INTENTS = [
   {
     name: 'WHAT_IS_RESQMAP',
     patterns: [
+      'what is navis', "what's navis", 'navis kya hai',
+      'tell me about navis', 'navis about', 'about navis', 'navis meaning',
+      'explain navis', 'navis explain', 'define navis',
       'what is resqmap', "what's resqmap", 'what is resq map', 'resqmap kya hai',
       'tell me about resqmap', 'resqmap about', 'about resqmap', 'resqmap meaning',
       'explain resqmap', 'resqmap explain', 'define resqmap',
     ],
-    keywords: ['resqmap', 'resq', 'about'],
+    keywords: ['navis', 'resqmap', 'resq', 'about'],
   },
   {
     name: 'PURPOSE_OF_RESQMAP',
     patterns: [
-      'what is the purpose', 'why was resqmap', 'why resqmap', 'resqmap purpose',
+      'what is the purpose', 'why was navis', 'why navis', 'navis purpose', 'what does navis do',
+      'why was resqmap', 'why resqmap', 'resqmap purpose',
       'why was this made', 'why was this created', 'what does resqmap do',
-      'resqmap kya karta hai', 'iska purpose kya hai',
+      'navis kya karta hai', 'resqmap kya karta hai', 'iska purpose kya hai',
     ],
     keywords: ['purpose', 'why', 'created', 'made', 'goal', 'aim'],
   },
@@ -173,6 +177,7 @@ const INTENTS = [
   {
     name: 'HOW_RESQMAP_WORKS',
     patterns: [
+      'how does navis work', 'how navis works', 'navis workflow',
       'how does resqmap work', 'how resqmap works', 'resqmap workflow',
       'how it works', 'process', 'kaise kaam karta hai', 'workflow',
       'resqmap process', 'explain the process', 'how is it done',

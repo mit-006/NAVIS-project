@@ -16,7 +16,7 @@ REPORT_PATH = os.path.join(BASE_DIR, 'data', 'inspection', 'landslide_exposure_i
 CLASS_NAMES = {1: 'Very Low', 2: 'Low', 3: 'Moderate', 4: 'High', 5: 'Very High'}
 
 print('='*70)
-print('ResQMap Landslide Exposure Calculation')
+print('NAVIS Landslide Exposure Calculation')
 print('='*70)
 
 # STEP 1: Load habitation layer

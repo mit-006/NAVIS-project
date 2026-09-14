@@ -21,7 +21,7 @@ from shapely.ops import unary_union, nearest_points
 import warnings
 warnings.filterwarnings('ignore')
 
-BASE = 'C:/Users/DELL/OneDrive/Documents/Default Project/resqmap'
+BASE = 'C:/Users/DELL/OneDrive/Documents/Default Project/navis'
 PROCESSED = f'{BASE}/data/processed'
 
 print("=" * 70)
@@ -86,22 +86,28 @@ print("STEP 1 - ELEVATION ANALYSIS")
 print("=" * 70)
 
 def extract_dem_value(gdf, dem_src, band=1):
-    """Extract DEM value at each geometry centroid"""
+    """Extract DEM values at geometry centroids in the DEM's CRS.
+
+    The source habitation layer is normally EPSG:4326 while the DEM may be
+    projected (for example EPSG:32646). Reproject before converting geometry
+    coordinates to raster pixels; otherwise elevation/slope samples can be
+    silently read from the wrong raster cells.
+    """
     dem = dem_src.read(band)
     transform = dem_src.transform
     nodata = dem_src.nodata
-    
+    sampled_gdf = gdf.to_crs(dem_src.crs) if gdf.crs != dem_src.crs else gdf
+
     values = []
-    for geom in gdf.geometry:
-        if geom is None:
+    for geom in sampled_gdf.geometry:
+        if geom is None or geom.is_empty:
             values.append(np.nan)
             continue
         centroid = geom.centroid
-        # Convert coordinates to pixel indices
         row, col = rasterio.transform.rowcol(transform, centroid.x, centroid.y)
         if 0 <= row < dem.shape[0] and 0 <= col < dem.shape[1]:
             val = dem[row, col]
-            if nodata and val == nodata:
+            if nodata is not None and val == nodata:
                 values.append(np.nan)
             else:
                 values.append(float(val))

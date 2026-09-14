@@ -3,11 +3,11 @@ let cachedData = null;
 export const FLOOD_YEARS = [1998, 1999, 2004, 2012, 2013];
 
 export const EXPOSURE_CATEGORIES = [
-  { label: 'No Exposure', min: 0, max: 0, color: '#e5e7eb' },
-  { label: 'Low Exposure', min: 0.01, max: 25, color: '#93c5fd' },
-  { label: 'Moderate Exposure', min: 25.01, max: 50, color: '#fcd34d' },
-  { label: 'High Exposure', min: 50.01, max: 75, color: '#fb923c' },
-  { label: 'Very High Exposure', min: 75.01, max: 100, color: '#ef4444' },
+  { label: 'No Exposure', min: 0, max: 0, color: '#D7DCE1' },
+  { label: 'Low Exposure', min: 0.01, max: 25, color: '#6FA8BA' },
+  { label: 'Moderate Exposure', min: 25.01, max: 50, color: '#D9A339' },
+  { label: 'High Exposure', min: 50.01, max: 75, color: '#C4632B' },
+  { label: 'Very High Exposure', min: 75.01, max: 100, color: '#A62B26' },
 ];
 
 export function getExposureCategory(pct) {
@@ -93,10 +93,10 @@ export function getTopExposed(features, year, limit = 20) {
 }
 
 export const PRIORITY_LEVELS = [
-  { level: 'Critical', color: '#dc2626', bg: '#fef2f2', border: '#fecaca', minScore: 70 },
-  { level: 'High', color: '#ea580c', bg: '#fff7ed', border: '#fed7aa', minScore: 50 },
-  { level: 'Medium', color: '#ca8a04', bg: '#fefce8', border: '#fef08a', minScore: 30 },
-  { level: 'Low', color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', minScore: 0 },
+  { level: 'Critical', color: '#A62B26', bg: '#FBEDEC', border: '#E3B7B4', minScore: 70 },
+  { level: 'High', color: '#C4632B', bg: '#FCF1E9', border: '#E9C4A9', minScore: 50 },
+  { level: 'Medium', color: '#B4841F', bg: '#FBF3E1', border: '#E3CA9C', minScore: 30 },
+  { level: 'Low', color: '#2F7A63', bg: '#EAF4F1', border: '#A9CFC4', minScore: 0 },
 ];
 
 export function getPriorityLevel(score) {

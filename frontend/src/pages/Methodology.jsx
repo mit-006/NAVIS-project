@@ -121,6 +121,48 @@ export default function Methodology() {
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+          <h3 className="font-semibold text-gray-900 mb-4">Relocation Suitability</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            Preliminary relocation candidates are ranked using an explainable weighted suitability score. The score is a decision-support indicator generated from the attributes available in the candidate dataset; it is not an official land-allocation or safety certification.
+          </p>
+          <div className="space-y-4">
+            <FormulaCard
+              title="Suitability Score"
+              formula="Score = Elevation (25) + Slope (15) + Road Access (20) + Amenities (25) + Proximity (15)"
+              description="The five components contribute a maximum of 100 points. Higher scores indicate greater suitability under the configured criteria."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p className="text-xs font-semibold text-gray-700">Elevation — 25%</p>
+                <p className="text-[11px] text-gray-500 mt-1">Normalized as min(elevation / 300, 1) × 25.</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p className="text-xs font-semibold text-gray-700">Slope — 15%</p>
+                <p className="text-[11px] text-gray-500 mt-1">Normalized as max(0, 1 − slope / 30) × 15; flatter terrain scores higher.</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p className="text-xs font-semibold text-gray-700">Road Accessibility — 20%</p>
+                <p className="text-[11px] text-gray-500 mt-1">Normalized as max(0, 1 − distance to major road / 10) × 20.</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p className="text-xs font-semibold text-gray-700">Amenities — 25%</p>
+                <p className="text-[11px] text-gray-500 mt-1">Amenities score (0–100) is scaled to a maximum of 25 points.</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 md:col-span-2">
+                <p className="text-xs font-semibold text-gray-700">Vulnerable-Population Proximity — 15%</p>
+                <p className="text-[11px] text-gray-500 mt-1">Combines distance to the nearest exposed habitation (8 points) and nearby vulnerable population (7 points). The proximity factor is intended to balance accessibility to affected populations with relocation usefulness.</p>
+              </div>
+            </div>
+            <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
+              <p className="text-sm font-semibold text-amber-800">Interpretation</p>
+              <p className="text-xs text-amber-700 mt-1">
+                Suitability scores compare candidates under NAVIS's configured criteria. They do not establish legal ownership, construction feasibility, hazard-free status, or final suitability. Field verification and authority approval are required before any real relocation decision.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
           <h3 className="font-semibold text-gray-900 mb-4">Data Sources</h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">

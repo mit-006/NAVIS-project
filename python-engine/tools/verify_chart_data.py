@@ -1,6 +1,6 @@
 import json
 
-with open(r"C:\Users\DELL\OneDrive\Documents\Default Project\resqmap\data\processed\kamrup_metro_flood_exposure.geojson", 'r') as f:
+with open(r"C:\Users\DELL\OneDrive\Documents\Default Project\navis\data\processed\kamrup_metro_flood_exposure.geojson", 'r') as f:
     g = json.load(f)
 
 feats = g['features']

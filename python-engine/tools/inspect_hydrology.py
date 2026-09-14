@@ -155,7 +155,7 @@ for ds in DATASETS:
     print(f"INSPECTING: {ds['name']}")
     print(f"{'='*60}")
     
-    path = f"C:\\Users\\DELL\\OneDrive\\Documents\\Default Project\\resqmap\\data\\raw\\hydrology\\{ds['filename']}"
+    path = f"C:\\Users\\DELL\\OneDrive\\Documents\\Default Project\\navis\\data\\raw\\hydrology\\{ds['filename']}"
     
     cols, rows = read_csv(path)
     print(f"Columns ({len(cols)}): {cols}")
@@ -327,7 +327,7 @@ for ds in DATASETS:
     }
 
 # Save results
-with open("C:\\Users\\DELL\\OneDrive\\Documents\\Default Project\\resqmap\\data\\raw\\hydrology\\inspection_results.json", 'w') as f:
+with open("C:\\Users\\DELL\\OneDrive\\Documents\\Default Project\\navis\\data\\raw\\hydrology\\inspection_results.json", 'w') as f:
     json.dump(results, f, indent=2, default=str)
 
 print(f"\n{'='*60}")

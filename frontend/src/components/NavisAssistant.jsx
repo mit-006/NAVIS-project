@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { processQuery, SUGGESTED_QUESTIONS } from '../services/resqAssistant';
+import { processQuery, SUGGESTED_QUESTIONS } from '../services/navisAssistant';
 
 function formatMarkdown(text) {
   return text
@@ -47,7 +47,7 @@ const LIGHT = {
   disabledBg: '#E4E4E7',
 };
 
-export default function ResQAssistant() {
+export default function NavisAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');

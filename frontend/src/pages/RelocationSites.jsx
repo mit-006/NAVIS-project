@@ -22,27 +22,90 @@ function FitBounds({ features }) {
   return null;
 }
 
-function getGeometryCentroid(geometry) {
-  const coords = [];
+function isPointInRing(point, ring) {
+  const [lat, lng] = point;
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [x1, y1] = ring[i];
+    const [x2, y2] = ring[j];
+    const intersects = ((y1 > lat) !== (y2 > lat)) &&
+      (lng < ((x2 - x1) * (lat - y1)) / (y2 - y1) + x1);
+    if (intersects) inside = !inside;
+  }
+  return inside;
+}
+
+function isPointInPolygon(point, rings) {
+  if (!rings?.length || !isPointInRing(point, rings[0])) return false;
+  return !rings.slice(1).some((hole) => isPointInRing(point, hole));
+}
+
+function polygonArea(ring) {
+  let area = 0;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    area += ring[j][0] * ring[i][1] - ring[i][0] * ring[j][1];
+  }
+  return Math.abs(area) / 2;
+}
+
+function getRingAverage(ring) {
+  const points = ring.slice(0, -1);
+  const avgLng = points.reduce((sum, c) => sum + c[0], 0) / points.length;
+  const avgLat = points.reduce((sum, c) => sum + c[1], 0) / points.length;
+  return [avgLat, avgLng];
+}
+
+function getInteriorPointFromPolygon(rings) {
+  const outer = rings[0];
+  if (!outer || outer.length < 4) return null;
+
+  const average = getRingAverage(outer);
+  if (isPointInPolygon(average, rings)) return average;
+
+  const lngs = outer.map((c) => c[0]);
+  const lats = outer.map((c) => c[1]);
+  const minLng = Math.min(...lngs);
+  const maxLng = Math.max(...lngs);
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+
+  // Search a small deterministic grid when the vertex average falls outside
+  // a concave polygon. This keeps the marker inside the candidate geometry.
+  const steps = 12;
+  for (let row = 1; row < steps; row += 1) {
+    for (let col = 1; col < steps; col += 1) {
+      const lat = minLat + ((maxLat - minLat) * row) / steps;
+      const lng = minLng + ((maxLng - minLng) * col) / steps;
+      if (isPointInPolygon([lat, lng], rings)) return [lat, lng];
+    }
+  }
+  return average;
+}
+
+function getGeometryMarkerPoint(geometry) {
   if (geometry.type === 'Point') {
     return [geometry.coordinates[1], geometry.coordinates[0]];
   }
+
   if (geometry.type === 'Polygon') {
-    geometry.coordinates[0].forEach((c) => coords.push(c));
-  } else if (geometry.type === 'MultiPolygon') {
-    geometry.coordinates.forEach((poly) => poly[0].forEach((c) => coords.push(c)));
+    return getInteriorPointFromPolygon(geometry.coordinates) || [0, 0];
   }
-  if (coords.length === 0) return [0, 0];
-  const avgLng = coords.reduce((s, c) => s + c[0], 0) / coords.length;
-  const avgLat = coords.reduce((s, c) => s + c[1], 0) / coords.length;
-  return [avgLat, avgLng];
+
+  if (geometry.type === 'MultiPolygon') {
+    const largest = [...geometry.coordinates].sort(
+      (a, b) => polygonArea(b[0]) - polygonArea(a[0])
+    )[0];
+    return getInteriorPointFromPolygon(largest) || [0, 0];
+  }
+
+  return [0, 0];
 }
 
 function CandidateMarker({ feature, isSelected, onClick }) {
   const p = feature.properties;
   const lvl = getSuitabilityLevel(p.suitability_score);
   const radius = isSelected ? 10 : 7;
-  const center = useMemo(() => getGeometryCentroid(feature.geometry), [feature]);
+  const center = useMemo(() => getGeometryMarkerPoint(feature.geometry), [feature]);
   return (
     <CircleMarker
       center={center}
@@ -293,7 +356,7 @@ export default function RelocationSites() {
               <h3 className="text-sm font-bold text-gray-900">Candidate Site Map</h3>
               <p className="text-xs text-gray-500 mt-0.5">{filtered.length} candidates shown — click a marker for details</p>
             </div>
-            <div className="h-[300px] md:h-[400px] relative">
+            <div className="h-[420px] md:h-[560px] lg:h-[640px] relative">
               <MapContainer center={[26.15, 91.85]} zoom={11} className="h-full w-full" zoomControl={false}>
                 <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <FitBounds features={filtered} />

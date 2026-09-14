@@ -62,3 +62,7 @@ python-engine/.venv/
 
 # Audit screenshots
 frontend/audit_screenshots/
+# Internal-only audit/debug docs (not for public repo)
+internal/
+docs/audit/
+

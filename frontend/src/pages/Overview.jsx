@@ -75,19 +75,17 @@ export default function Overview({ features, allStats, selectedYear, setSelected
     <div className="h-full overflow-y-auto" style={{ background: 'var(--bg-primary)' }}>
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6 space-y-5 md:space-y-6">
 
-        {/* ── HERO ── */}
-        <div className="relative overflow-hidden rounded-xl hero-cosmos">
-          <RainEffect />
-          <div className="hero-stars" />
-          <div className="relative z-10 p-5 md:p-7 text-white">
+        {/* ── OVERVIEW INTELLIGENCE HEADER ── */}
+        <div className="navis-overview-intro">
+          <div className="relative z-10 p-5 md:p-7">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-                  <span className="text-[10px] font-semibold text-green-300/80 uppercase tracking-[0.15em]">Disaster Intelligence Platform</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">Disaster Intelligence Platform</span>
                 </div>
-                <h1 className="text-xl md:text-2xl lg:text-[1.75rem] font-bold tracking-tight leading-tight">Spatial Risk Overview</h1>
-                <p className="text-[13px] md:text-sm text-slate-300/80 mt-2 max-w-xl leading-relaxed">
+                <h1 className="text-xl md:text-2xl lg:text-[1.75rem] font-bold tracking-tight leading-tight font-display text-slate-900 dark:text-white">Spatial Risk Overview</h1>
+                <p className="text-[13px] md:text-sm text-slate-600 dark:text-slate-300 mt-2 max-w-xl leading-relaxed">
                   Geospatial assessment of hazard exposure, vulnerable habitations and priority areas across Kamrup Metropolitan, Assam.
                 </p>
               </div>
@@ -97,10 +95,10 @@ export default function Overview({ features, allStats, selectedYear, setSelected
                   { label: 'Analysed Hazard', value: 'Flood', sub: 'NDEM Inundation' },
                   { label: 'Analysis Period', value: '1998–2013', sub: `${FLOOD_YEARS.length} events` },
                 ].map((item, i) => (
-                  <div key={item.label} className={`bg-white/[0.06] backdrop-blur-sm rounded-lg px-3 py-2.5 border border-white/[0.08] ${i === 2 ? 'col-span-2 sm:col-span-1' : ''}`}>
-                    <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">{item.label}</p>
-                    <p className="text-sm font-bold mt-0.5">{item.value}</p>
-                    <p className="text-[10px] text-slate-400">{item.sub}</p>
+                  <div key={item.label} className={`bg-white dark:bg-slate-900 rounded-lg px-3 py-2.5 border border-slate-200 dark:border-slate-700 ${i === 2 ? 'col-span-2 sm:col-span-1' : ''}`}>
+                    <p className="text-[9px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{item.label}</p>
+                    <p className="text-sm font-bold mt-0.5 text-slate-900 dark:text-white">{item.value}</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400">{item.sub}</p>
                   </div>
                 ))}
               </div>
@@ -122,7 +120,7 @@ export default function Overview({ features, allStats, selectedYear, setSelected
                 <span className="w-1 h-4 rounded-full" style={{ backgroundColor: kpi.accent }}></span>
                 <p className="text-[10px] md:text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>{kpi.label}</p>
               </div>
-              <p className="text-2xl md:text-[1.75rem] font-bold leading-none" style={{ color: 'var(--text-primary)' }}>{kpi.value}</p>
+              <p className="text-2xl md:text-[1.75rem] font-bold leading-none stat-number" style={{ color: 'var(--text-primary)' }}>{kpi.value}</p>
               <p className="text-[11px] mt-1" style={{ color: 'var(--text-tertiary)' }}>{kpi.sub}</p>
             </div>
           ))}

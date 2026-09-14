@@ -2,11 +2,12 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { HashRouter as Router, Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import { loadFloodData, computeAllYearStats } from './data/floodData';
 import { loadRelocationData } from './data/relocationData';
-import { initAssistant } from './services/resqAssistant';
+import { initAssistant } from './services/navisAssistant';
 import { DemoModeProvider } from './demo/DemoModeContext';
 import DemoModeToggle from './components/DemoModeToggle';
 import DemoBanner from './components/DemoBanner';
-import ResQAssistant from './components/ResQAssistant';
+import DemoAlertNotification from './components/DemoAlertNotification';
+import NavisAssistant from './components/NavisAssistant';
 import Overview from './pages/Overview';
 import FloodMap from './pages/FloodMap';
 import HistoricalAnalysis from './pages/HistoricalAnalysis';
@@ -36,253 +37,170 @@ const HAZARDS = [
   { id: 'waterlogging', label: 'Urban Waterlogging', status: 'coming-soon' },
 ];
 
+
 function ThemeToggle({ dark, setDark }) {
-  return (
-    <button
-      onClick={() => setDark(!dark)}
-      className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-slate-300 hover:text-white"
-      aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-      title={dark ? 'Light mode' : 'Dark mode'}
-    >
-      {dark ? (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      ) : (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
-      )}
-    </button>
-  );
+  return <button onClick={() => setDark(!dark)} className="navis-icon-btn" aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'} title={dark ? 'Light mode' : 'Dark mode'}>
+    {dark ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+      : <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>}
+  </button>;
 }
 
-function AppLayout() {
+function useAppData() {
   const [geojson, setGeojson] = useState(null);
   const [allStats, setAllStats] = useState(null);
   const [selectedYear, setSelectedYear] = useState(1998);
-  const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [dark, setDark] = useState(() => {
-    const saved = localStorage.getItem('resqmap-theme');
-    if (saved) return saved === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
-  const location = useLocation();
+  useEffect(() => { loadFloodData().then((data) => { setGeojson(data); setAllStats(computeAllYearStats(data.features)); loadRelocationData().then((rData) => initAssistant(data.features, rData.features)).catch(() => initAssistant(data.features, [])); }); }, []);
+  return { features: geojson?.features || [], allStats, selectedYear, setSelectedYear, currentStats: allStats?.[selectedYear] || null };
+}
 
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
+function AppShell({ children, variant }) {
+  const [dark, setDark] = useState(() => { const saved = localStorage.getItem('navis-theme'); return saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches; });
+  useEffect(() => { localStorage.setItem('navis-theme', dark ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', dark); }, [dark]);
+  return <div className={`navis-shell navis-${variant}`} style={{background:'var(--bg-primary)'}}>{children(dark,setDark)}</div>;
+}
 
-  useEffect(() => {
-    localStorage.setItem('resqmap-theme', dark ? 'dark' : 'light');
-    document.documentElement.classList.toggle('dark', dark);
-  }, [dark]);
+function RoutesView({ features, allStats, selectedYear, setSelectedYear, currentStats }) {
+  return <Routes>
+    <Route path="/" element={<Overview features={features} allStats={allStats} selectedYear={selectedYear} setSelectedYear={setSelectedYear} currentStats={currentStats} />} />
+    <Route path="/map" element={<FloodMap features={features} selectedYear={selectedYear} setSelectedYear={setSelectedYear} currentStats={currentStats} />} />
+    <Route path="/historical" element={<HistoricalAnalysis features={features} allStats={allStats} />} />
+    <Route path="/explorer" element={<HabitationExplorer features={features} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />} />
+    <Route path="/priority" element={<PriorityAnalysis features={features} selectedYear={selectedYear} />} />
+    <Route path="/relocation" element={<RelocationSites />} />
+    <Route path="/methodology" element={<Methodology />} />
+  </Routes>;
+}
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
+function NavIcon({d}) { return <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={d}/></svg>; }
+function App() { const data=useAppData(); return <Router><DemoModeProvider><AppShell variant="map">{(dark,setDark)=><MapLayout {...data} dark={dark} setDark={setDark}/>}</AppShell></DemoModeProvider></Router>; }
 
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [mobileOpen]);
-
-  useEffect(() => {
-    loadFloodData().then((data) => {
-      setGeojson(data);
-      setAllStats(computeAllYearStats(data.features));
-      loadRelocationData().then((rData) => {
-        initAssistant(data.features, rData.features);
-      }).catch(() => {
-        initAssistant(data.features, []);
-      });
-    });
-  }, []);
-
-  const features = geojson?.features || [];
-  const currentStats = allStats?.[selectedYear] || null;
-
-  return (
-    <div className="flex flex-col h-screen overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
-      {/* Header */}
-      <header className="text-white px-4 md:px-5 py-2 shadow-lg z-[9999] flex-shrink-0 flex items-center gap-3" style={{ background: 'linear-gradient(to right, #0f172a, #1e293b, #0f172a)' }}>
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden p-1.5 rounded hover:bg-white/10 transition-colors"
-          aria-label="Toggle navigation"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {mobileOpen
-              ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            }
-          </svg>
-        </button>
-
-        {/* Desktop sidebar toggle */}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="hidden lg:block p-1.5 rounded hover:bg-white/10 transition-colors"
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {collapsed
-              ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-            }
-          </svg>
-        </button>
-
-        <img src="/assets/resqmap-logo.png" alt="NAVIS" className="h-8 w-auto flex-shrink-0" />
-        <div className="flex-1 min-w-0">
-          <h1 className="text-sm md:text-base font-bold tracking-tight leading-none">NAVIS</h1>
-          <p className="text-[9px] md:text-[10px] text-slate-400 tracking-wide uppercase hidden sm:block">Natural-hazard Assessment & Vulnerability Intelligence System</p>
+function GovHeader({ dark, setDark, mobileOpen, setMobileOpen }) {
+  const primary = NAV_ITEMS.slice(0, 6);
+  return <>
+    <div className="navis-utility-bar">
+      <div className="navis-utility-inner">
+        <div className="flex items-center gap-4">
+          <span className="navis-utility-brand">NAVIS</span>
+          <span className="hidden sm:inline">Natural Hazard Assessment & Vulnerability Intelligence System</span>
         </div>
-        <div className="hidden lg:flex items-center gap-2 text-xs mr-2">
-          <span className="text-slate-400">Study Area:</span>
-          <span className="font-medium text-white bg-white/10 px-2 py-0.5 rounded">Kamrup Metropolitan, Assam</span>
+        <div className="flex items-center gap-4">
+          <span className="hidden md:inline">Kamrup Metropolitan, Assam</span>
+          <span className="navis-utility-live"><i /> GIS intelligence online</span>
         </div>
-        <div className="hidden sm:flex items-center gap-1.5 text-xs mr-2">
-          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-          <span className="text-green-300 font-medium">Flood</span>
-        </div>
-        <ThemeToggle dark={dark} setDark={setDark} />
-        <DemoModeToggle />
-      </header>
-
-      <DemoBanner />
-
-      <div className="flex flex-1 overflow-hidden relative">
-        {/* Mobile overlay */}
-        {mobileOpen && (
-          <div
-            className="fixed inset-0 bg-black/40 z-[9998] lg:hidden"
-            onClick={() => setMobileOpen(false)}
-          />
-        )}
-
-        {/* Sidebar */}
-        <aside
-          className={`
-            fixed lg:static inset-y-0 left-0 z-[9999]
-            lg:z-auto
-            ${isMobile
-              ? (mobileOpen ? 'translate-x-0' : '-translate-x-full')
-              : (collapsed ? 'w-[60px]' : 'w-60')
-            }
-            ${isMobile ? 'w-[min(80vw,300px)]' : ''}
-            flex flex-col border-r transition-all duration-200 ease-in-out
-          `}
-          style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border-primary)', top: isMobile ? 0 : undefined }}
-        >
-          <nav className="flex-1 overflow-y-auto p-2 pt-2 lg:pt-2 space-y-0.5">
-            {!collapsed && <p className="text-[10px] font-semibold uppercase tracking-wider px-3 mb-2" style={{ color: 'var(--text-tertiary)' }}>Navigation</p>}
-            {NAV_ITEMS.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  title={collapsed ? item.label : undefined}
-                  className={`flex items-center rounded-lg text-sm font-medium transition-all border ${
-                    collapsed ? 'justify-center px-2 py-2.5' : 'gap-3 px-3 py-2.5'
-                  } ${
-                    isActive
-                      ? 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800'
-                      : 'border-transparent hover:bg-gray-50 dark:hover:bg-white/5'
-                  }`}
-                  style={!isActive ? { color: 'var(--text-secondary)' } : {}}
-                >
-                  <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
-                  </svg>
-                  {!collapsed && <span className="truncate">{item.label}</span>}
-                </NavLink>
-              );
-            })}
-
-            {!collapsed && (
-              <div className="pt-3">
-                <p className="text-[10px] font-semibold uppercase tracking-wider px-3 mb-2" style={{ color: 'var(--text-tertiary)' }}>Hazards</p>
-                {HAZARDS.map((h) => (
-                  <div
-                    key={h.id}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${
-                      h.status === 'active'
-                        ? 'bg-blue-50 text-blue-700 font-medium dark:bg-blue-900/30 dark:text-blue-300'
-                        : 'cursor-default'
-                    }`}
-                    style={h.status !== 'active' ? { color: 'var(--text-tertiary)' } : {}}
-                  >
-                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${h.status === 'active' ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'}`}></span>
-                    <span className="flex-1">{h.label}</span>
-                    {h.status === 'coming-soon' && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: 'var(--bg-tertiary)', color: 'var(--text-tertiary)' }}>Soon</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {collapsed && (
-              <div className="pt-3 flex flex-col items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500" title="Flood - Active"></div>
-                <div className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600" title="Other hazards - Coming soon"></div>
-              </div>
-            )}
-          </nav>
-
-          {!collapsed && (
-            <div className="p-2 border-t" style={{ borderColor: 'var(--border-primary)' }}>
-              <div className="rounded-lg p-3 border border-blue-200 dark:border-blue-800" style={{ background: dark ? 'rgba(59,130,246,0.08)' : 'linear-gradient(to bottom right, #eff6ff, #ecfeff)' }}>
-                <p className="text-[10px] font-semibold text-blue-800 dark:text-blue-300 uppercase tracking-wider mb-1">Flood Data</p>
-                <div className="space-y-0.5 text-xs text-blue-700 dark:text-blue-400">
-                  <p>Years: 1998, 1999, 2004, 2012, 2013</p>
-                  <p>Source: NDEM / NRSC / ISRO</p>
-                  <p>228 Habitations</p>
-                </div>
-              </div>
-            </div>
-          )}
-        </aside>
-
-        {/* Main content */}
-        <main className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<Overview features={features} allStats={allStats} selectedYear={selectedYear} setSelectedYear={setSelectedYear} currentStats={currentStats} />} />
-            <Route path="/map" element={<FloodMap features={features} selectedYear={selectedYear} setSelectedYear={setSelectedYear} currentStats={currentStats} />} />
-            <Route path="/historical" element={<HistoricalAnalysis features={features} allStats={allStats} />} />
-            <Route path="/explorer" element={<HabitationExplorer features={features} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />} />
-            <Route path="/priority" element={<PriorityAnalysis features={features} selectedYear={selectedYear} />} />
-            <Route path="/relocation" element={<RelocationSites />} />
-            <Route path="/methodology" element={<Methodology />} />
-          </Routes>
-        </main>
       </div>
-      <ResQAssistant />
     </div>
-  );
+    <header className="navis-public-header">
+      <div className="navis-public-inner">
+        <NavLink to="/" className="navis-brand-lockup" aria-label="NAVIS home">
+          <img src="/assets/navis-logo.png" alt="NAVIS" className="h-10 w-auto" />
+          <span className="navis-brand-copy"><strong>NAVIS</strong><small>DISASTER INTELLIGENCE</small></span>
+        </NavLink>
+        <nav className="navis-public-nav hidden lg:flex" aria-label="Primary navigation">
+          {primary.map(i => <NavLink key={i.path} to={i.path} className={({isActive}) => isActive ? 'active' : ''}>{i.label}</NavLink>)}
+        </nav>
+        <div className="navis-public-actions">
+          <ThemeToggle dark={dark} setDark={setDark} />
+          <DemoModeToggle />
+          <NavLink to="/map" className="navis-header-cta hidden sm:inline-flex">Open GIS Workspace <span>→</span></NavLink>
+          <button className="navis-icon-btn lg:hidden" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle navigation">☰</button>
+        </div>
+      </div>
+    </header>
+    {mobileOpen && <div className="navis-public-mobile lg:hidden">
+      {NAV_ITEMS.map(i => <NavLink key={i.path} to={i.path} onClick={() => setMobileOpen(false)}>{i.label}<span>→</span></NavLink>)}
+      <NavLink to="/map" onClick={() => setMobileOpen(false)} className="navis-mobile-cta">Open GIS Workspace →</NavLink>
+    </div>}
+  </>;
 }
 
-function App() {
-  return (
-    <Router>
-      <DemoModeProvider>
-        <AppLayout />
-      </DemoModeProvider>
-    </Router>
-  );
+function LandingHero({ features }) {
+  const exposed = features.filter(f => (f.properties?.flood_years_exposed || 0) > 0).length;
+  return <section className="navis-landing-hero">
+    <div className="navis-hero-grid" />
+    <div className="navis-hero-glow navis-hero-glow-a" />
+    <div className="navis-hero-glow navis-hero-glow-b" />
+    <div className="navis-hero-contours" />
+    <div className="navis-hero-inner">
+      <div className="navis-hero-copy navis-reveal">
+        <div className="navis-eyebrow"><span /> GEOSPATIAL DISASTER INTELLIGENCE</div>
+        <h1>Understand risk.<br /><em>Prepare with evidence.</em></h1>
+        <p>Spatial assessment of flood exposure, vulnerable habitations and preliminary relocation suitability across Kamrup Metropolitan, Assam.</p>
+        <div className="navis-hero-actions">
+          <NavLink to="/map" className="navis-primary-btn">Explore Flood Intelligence <span>→</span></NavLink>
+          <NavLink to="/methodology" className="navis-secondary-btn">How NAVIS works</NavLink>
+        </div>
+        <div className="navis-hero-note"><span className="navis-live-dot" /> Five historical flood years analysed · 228 habitation polygons assessed</div>
+      </div>
+      <div className="navis-hero-visual navis-reveal navis-reveal-delay">
+        <div className="navis-map-preview">
+          <div className="navis-map-preview-top"><span>LIVE GIS VIEW</span><b>MAX HISTORICAL EXPOSURE</b></div>
+          <div className="navis-map-surface">
+            <div className="navis-map-river" />
+            <div className="navis-map-boundary" />
+            <span className="navis-map-pin pin-a" /><span className="navis-map-pin pin-b" /><span className="navis-map-pin pin-c" />
+            <div className="navis-map-label label-a">KAMRUP METRO</div>
+            <div className="navis-map-label label-b">PRIORITY ZONE</div>
+            <div className="navis-map-crosshair" />
+          </div>
+          <div className="navis-map-preview-footer">
+            <div><small>HABITATIONS</small><strong>{features.length || 228}</strong></div>
+            <div><small>HISTORICALLY EXPOSED</small><strong>{exposed || 152}</strong></div>
+            <div><small>STUDY AREA</small><strong>ASSAM</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="navis-scroll-cue"><span /> Scroll to explore</div>
+  </section>;
 }
 
+function SectionBanner({ pathname }) {
+  const item = NAV_ITEMS.find(x => x.path === pathname);
+  if (!item || pathname === '/') return null;
+  const descriptions = {
+    '/map': 'Explore historical flood exposure, live conditions and habitation-level intelligence.',
+    '/priority': 'Identify analytical priority areas using transparent historical exposure indicators.',
+    '/historical': 'Compare flood exposure patterns across the analysed historical years.',
+    '/explorer': 'Inspect habitation-level exposure, population and risk context.',
+    '/relocation': 'Review preliminary relocation suitability candidates and their scoring context.',
+    '/methodology': 'Understand the datasets, calculations, assumptions and current limitations behind NAVIS.'
+  };
+  return <section className="navis-section-banner">
+    <div className="navis-section-banner-grid" />
+    <div className="navis-section-banner-inner">
+      <div><span className="navis-eyebrow"><span /> NAVIS INTELLIGENCE WORKSPACE</span><h1>{item.label}</h1><p>{descriptions[pathname]}</p></div>
+      <NavLink to="/map" className="navis-banner-cta">Open GIS Workspace <span>→</span></NavLink>
+    </div>
+  </section>;
+}
+
+function SiteFooter() {
+  return <footer className="navis-site-footer">
+    <div className="navis-footer-main">
+      <div className="navis-footer-brand"><img src="/assets/navis-logo.png" alt="NAVIS" /><p>Natural Hazard Assessment & Vulnerability Intelligence System for spatial disaster-risk analysis.</p></div>
+      <div><h3>Explore</h3>{NAV_ITEMS.slice(0,4).map(i=><NavLink key={i.path} to={i.path}>{i.label}</NavLink>)}</div>
+      <div><h3>Decision Support</h3><NavLink to="/relocation">Relocation Sites</NavLink><NavLink to="/priority">Priority Analysis</NavLink><NavLink to="/methodology">Methodology</NavLink></div>
+      <div><h3>Scope</h3><p>Kamrup Metropolitan, Assam</p><p>Flood analysis · 1998–2013</p><p>228 habitation polygons</p></div>
+    </div>
+    <div className="navis-footer-bottom"><span>© NAVIS · SIH project build</span><span>Analytical decision-support system · Not an official emergency directive</span></div>
+  </footer>;
+}
+
+function MapLayout({features,allStats,selectedYear,setSelectedYear,currentStats,dark,setDark}) {
+  const loc=useLocation();
+  const [open,setOpen]=useState(false);
+  const isOverview = loc.pathname === '/';
+  const isMap = loc.pathname === '/map';
+  return <div className="navis-public-shell">
+    <GovHeader dark={dark} setDark={setDark} mobileOpen={open} setMobileOpen={setOpen}/>
+    <DemoBanner/><DemoAlertNotification/>
+    {isOverview && <LandingHero features={features}/>} 
+    {!isOverview && <SectionBanner pathname={loc.pathname}/>} 
+    <div className={`navis-route-area ${isMap ? 'navis-route-map' : ''}`}>
+      <RoutesView {...{features,allStats,selectedYear,setSelectedYear,currentStats}}/>
+    </div>
+    {!isMap && <SiteFooter/>}
+    <NavisAssistant/>
+  </div>;
+}
 export default App;

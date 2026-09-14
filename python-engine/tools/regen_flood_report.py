@@ -1,7 +1,7 @@
 import json
 import os
 
-SCRIPT_DIR = r"C:\Users\DELL\OneDrive\Documents\Default Project\resqmap\python-engine\scripts"
+SCRIPT_DIR = r"C:\Users\DELL\OneDrive\Documents\Default Project\navis\python-engine\scripts"
 BASE_DIR = os.path.join(SCRIPT_DIR, '..', '..')
 GEOJSON_PATH = os.path.join(BASE_DIR, 'data', 'processed', 'kamrup_metro_flood_exposure.geojson')
 REPORT_PATH = os.path.join(BASE_DIR, 'data', 'inspection', 'flood_exposure_inspection.md')
