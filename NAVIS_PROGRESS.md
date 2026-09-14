@@ -2,9 +2,9 @@
 
 ## Status
 
-* Current batch: 9 (Backend/API and security audit)
-* Overall progress: Batch 1–6 completed; Batch 7 implemented locally; ML/backend/security audit remains open
-* Current source/ZIP: NAVIS-project-batch7-gis-geometry-audit.zip
+* Current batch: 10 (UI/UX and responsive foundation)
+* Overall progress: Batch 1–9 completed; Batch 10 UI/UX polish in progress
+* Current source/ZIP: NAVIS-project-batch10-ui-responsive-foundation.zip
 * Last updated: 2026-09-14
 * Branch: fix/hygiene-branding (ZIP has no .git; commit/push locally)
 
@@ -85,6 +85,33 @@
 * [ ] Automated tests for deterministic scoring/GIS logic.
 * [ ] UI/UX polish and responsive QA.
 * [ ] Final end-to-end SIH demo/readiness audit.
+
+
+## Batch 10 — UI/UX + Responsive Foundation
+
+### DONE
+
+* [x] Standardized global body typography to use the configured Inter font.
+* [x] Increased header navigation controls to touch-friendly 40px targets.
+* [x] Added consistent keyboard focus-visible styling using the NAVIS signal accent.
+* [x] Added dark-mode scrollbar styling and global tap/selection polish.
+* [x] Fixed the responsive breakpoint mismatch: the mobile/sidebar state now switches at the same 1024px `lg` breakpoint used by the layout, preventing tablet-width sidebar overlap.
+* [x] Added `min-w-0` to the main content flex child to reduce horizontal overflow risk.
+
+### VERIFIED
+
+* [x] Batch 9 backend/security changes remain intact.
+* [ ] Local browser QA and production build after Batch 10 remain required.
+
+### BLOCKERS
+
+* [ ] Full page-by-page visual QA still requires the user's browser.
+* [ ] Mobile/tablet/desktop visual verification remains pending.
+
+### NEXT
+
+* [ ] Continue page-level UI polish after local browser verification.
+* [ ] Run responsive/performance checks before closing Batch 10.
 
 ## Next recommended batch
 

@@ -41,7 +41,7 @@ function ThemeToggle({ dark, setDark }) {
   return (
     <button
       onClick={() => setDark(!dark)}
-      className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-slate-300 hover:text-white"
+      className="min-h-10 min-w-10 p-2 rounded-lg hover:bg-white/10 transition-colors text-slate-300 hover:text-white inline-flex items-center justify-center"
       aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={dark ? 'Light mode' : 'Dark mode'}
     >
@@ -73,7 +73,7 @@ function AppLayout() {
   const location = useLocation();
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
+    const check = () => setIsMobile(window.innerWidth < 1024);
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
@@ -119,7 +119,7 @@ function AppLayout() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden p-1.5 rounded hover:bg-white/10 transition-colors"
+          className="lg:hidden min-h-10 min-w-10 p-2 rounded hover:bg-white/10 transition-colors inline-flex items-center justify-center"
           aria-label="Toggle navigation"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,7 +133,7 @@ function AppLayout() {
         {/* Desktop sidebar toggle */}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hidden lg:block p-1.5 rounded hover:bg-white/10 transition-colors"
+          className="hidden lg:inline-flex min-h-10 min-w-10 p-2 rounded hover:bg-white/10 transition-colors items-center justify-center"
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
@@ -260,7 +260,7 @@ function AppLayout() {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 min-w-0 overflow-hidden">
           <Routes>
             <Route path="/" element={<Overview features={features} allStats={allStats} selectedYear={selectedYear} setSelectedYear={setSelectedYear} currentStats={currentStats} />} />
             <Route path="/map" element={<FloodMap features={features} selectedYear={selectedYear} setSelectedYear={setSelectedYear} currentStats={currentStats} />} />
