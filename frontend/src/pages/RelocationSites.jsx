@@ -293,7 +293,7 @@ export default function RelocationSites() {
               <h3 className="text-sm font-bold text-gray-900">Candidate Site Map</h3>
               <p className="text-xs text-gray-500 mt-0.5">{filtered.length} candidates shown — click a marker for details</p>
             </div>
-            <div className="h-[300px] md:h-[400px] relative">
+            <div className="h-[420px] md:h-[560px] lg:h-[640px] relative">
               <MapContainer center={[26.15, 91.85]} zoom={11} className="h-full w-full" zoomControl={false}>
                 <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <FitBounds features={filtered} />

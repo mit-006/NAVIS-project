@@ -2,8 +2,8 @@
 
 ## Status
 
-* Current batch: 2 (UI/visual redesign) — partial
-* Overall progress: Batch 1 done, Batch 2 partial, Batches 3-4-5 not started
+* Current batch: 3 (dark-mode completion + Relocation Sites map UX)
+* Overall progress: Batch 1 done, Batch 2 mostly done (typography rollout to remaining pages still open), Batch 3 (this one) done for its stated scope, Batches "backend honesty"/4/5 not started
 * Current source/ZIP: navis-project-updated.zip (this file ships inside it, at repo root)
 * Last updated: this session
 * Branch: fix/hygiene-branding (local + pushed to fork, not merged upstream)
@@ -31,6 +31,9 @@
 * [x] Replaced stock-Tailwind-hex severity/priority colors in `frontend/src/data/floodData.js` and `relocationData.js` with custom palette (centralized, cascades to map/badges/charts)
 * [x] App-wide brand re-skin: CSS layer in `frontend/src/index.css` remaps all `blue-*` utility classes (~150+ uses, 13 files) to new brand teal, light+dark mode, without editing those files individually
 * [x] Added Google Fonts, rebranded header gradient, applied `.font-display`/`.stat-number` to Overview page as pattern example
+* [x] Dark-mode gap fixes: added missing overrides for amber-900/800, yellow-600/700, orange-700, green-900, bg-amber-400/500/600/900, bg-yellow-50, border-amber-500/800, border-yellow-100/orange-100, bg-gray-200 (progress-bar tracks), bg-slate-700 — these were unstyled/broken in dark mode across Relocation Sites (limitations banner, flood-history box, pending-validation box, KPI cards, score-breakdown bars) and shared components (WhatIfSimulatorPanel, HabitationDetailPanel, RiskExplanationPanel, DemoEmergencyPanel, DemoControlPanel, PriorityAnalysis, Methodology)
+* [x] Relocation Sites map sizing fixed: map container was a fixed `h-[300px] md:h-[400px]` regardless of screen size, leaving very little usable map area (worse once zoomed in). Changed to `h-[420px] md:h-[560px] lg:h-[640px]`, consistent with FloodMap.jsx's map-forward sizing. Did not touch FitBounds/zoom logic or any GIS/data logic — pure layout fix.
+* [x] Reviewed DetailPanel (side panel) positioning — already renders correctly as a full-height slide-over sibling, not nested inside the map's `relative` container, so no structural fix was needed; only its color classes were covered by the dark-mode gap fixes above
 
 ## In Progress
 
@@ -38,7 +41,7 @@
 
 ## Remaining
 
-* [ ] Rebuild non-blue dark-mode colors (green/red/amber) from `!important` override hack to the CSS-variable-driven pattern already used for blue
+* [ ] Remaining dark-mode gaps (if any) are now much smaller — Relocation Sites, shared panels, and card components had all known missing color-class overrides added this batch. Not exhaustively swept across every page/component; if new visual bugs surface, same fix pattern applies (add the missing `.dark .<class>` rule in `frontend/src/index.css`).
 * [ ] Layout restructuring (map-forward vs. generic sidebar+content) — not attempted, highest risk/effort item in Batch 2, needs explicit design decision first
 * [ ] Icon system — still generic inline SVG paths hardcoded in `App.jsx`
 * [ ] Batch 3: backend honesty fix — user has NOT yet chosen between (a) actually deploying/wiring the Python+Node backend for real GIS computation, or (b) rewriting README to honestly describe the actual static-data architecture and removing/labeling the unused stub code. Ask before proceeding. Prior recommendation given to user: option (b) is lower-risk this close to deadline.
@@ -70,10 +73,10 @@
 
 ## Verification
 
-* Build: `npm run build` in `frontend/` passes as of end of Batch 2 work
+* Build: `npm run build` in `frontend/` passes as of end of this batch (Batch 2 + Batch 3 dark-mode/map fixes)
 * Tests: no automated test suite exists
 * Lint/type-check: not run this session
-* Browser: not manually verified this session (user was mid-way through copying Batch 2 to local machine when session limit was reached)
+* Browser: not manually verified in this sandbox (no headless browser available here) — user must verify locally after copying: check Relocation Sites map now shows more usable area, dark mode on Relocation Sites (limitations banner, flood-history box, pending-validation box, KPI cards, score bars) reads correctly, light mode and other pages unaffected
 * API/data/GIS: not verified this session — flagged as open item (Batch 4, and the new full-repo audit request)
 
 ## Result Optimization Log
@@ -107,9 +110,9 @@ No result-generating logic (scoring, thresholds, GIS calculations) has been touc
 
 ## EXACT RESUME POINT
 
-* Current task: Batch 2 (UI redesign) partial completion, packaged for handoff — user was in the process of copying the updated zip to their local machine via `robocopy /MIR` and had not yet committed when this session's message limit was reached
-* Last action: Generated `navis-project-updated.zip` (Batch 1 + Batch 2 changes) and this progress file
-* Next action: (1) User copies zip to local repo per commands below, commits, pushes to `fix/hygiene-branding` on their fork. (2) Ask user to choose Batch 3 direction (wire up backend vs. honest README) before starting it. (3) Continue Batch 2 remaining items (typography on 7 pages, non-blue dark-mode cleanup, layout restructuring decision) OR pivot to the deeper full-stack/GIS/ML audit the user's new master-prompt requests — clarify with user which takes priority next, since these are different scopes of work.
+* Current task: dark-mode completion + Relocation Sites map UX fix — done for stated scope, packaged for handoff
+* Last action: Generated `navis-project-updated.zip` (all batches to date) and this progress file
+* Next action: (1) User copies zip to local repo, commits, pushes. (2) User must browser-verify the checklist above (dark mode on Relocation Sites, map area size, light mode intact, no regressions on other pages) since this sandbox has no browser. (3) Ask user to choose Batch 3-proper direction (wire up backend vs. honest README) before starting it. (4) Remaining open work: typography rollout to 7 pages, layout restructuring decision, OR pivot to the deeper full-stack/GIS/ML audit from the user's master-prompt — clarify priority with user.
 * Files/areas: see "Remaining" section above for the full list, organized by batch
 * Commands (Windows/PowerShell, user's established working pattern):
   ```powershell

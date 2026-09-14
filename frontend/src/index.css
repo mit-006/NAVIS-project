@@ -565,3 +565,23 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 /* KPI / stat number utility (use in place of ad-hoc text-3xl font-bold) */
 .stat-number { font-family: theme('fontFamily.display'); font-feature-settings: 'tnum'; }
 .font-display { font-family: theme('fontFamily.display'); }
+
+/* Dark-mode gaps found on Relocation Sites, warning banners, and shared cards */
+.dark .text-orange-700 { color: #fdba74 !important; }
+.dark .text-green-900 { color: #86efac !important; }
+.dark .text-amber-900 { color: #fcd34d !important; }
+.dark .text-yellow-700,
+.dark .text-yellow-600 { color: #fde68a !important; }
+.dark .bg-amber-400,
+.dark .bg-amber-500,
+.dark .bg-amber-600 { background-color: #b45309 !important; }
+.dark .bg-amber-900 { background-color: rgba(180,83,9,0.25) !important; }
+.dark .bg-yellow-50 { background-color: rgba(180,83,9,0.15) !important; }
+.dark .border-amber-500,
+.dark .border-amber-800 { border-color: #b45309 !important; }
+.dark .border-yellow-100,
+.dark .border-orange-100 { border-color: #78350f !important; }
+.dark .text-amber-800 { color: #fcd34d !important; }
+.dark .text-red-800 { color: #fca5a5 !important; }
+.dark .bg-gray-200 { background-color: #27272a !important; }
+.dark .bg-slate-700 { background-color: #27272a !important; }
