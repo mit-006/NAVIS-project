@@ -77,7 +77,7 @@ function FloodCard({ data, onRefresh, refreshing }) {
         <MetricBox
           label="River Discharge"
           value={data.currentDischarge != null ? `${data.currentDischarge.toFixed(1)} m³/s` : 'N/A'}
-          sub={data.historicalMean ? `30d avg: ${data.historicalMean.toFixed(1)} m³/s` : null}
+          sub={data.historicalMean ? `14d avg: ${data.historicalMean.toFixed(1)} m³/s` : null}
         />
         <MetricBox
           label="Trend"
@@ -102,7 +102,7 @@ function FloodCard({ data, onRefresh, refreshing }) {
           Source: {data.source}
         </p>
         <p className="text-[9px]" style={{ color: 'var(--text-tertiary)' }}>
-          Updated: {data.lastUpdated}
+          Fetched: {data.lastUpdated}
         </p>
       </div>
     </div>
