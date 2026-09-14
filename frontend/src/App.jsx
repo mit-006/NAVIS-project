@@ -6,6 +6,7 @@ import { initAssistant } from './services/navisAssistant';
 import { DemoModeProvider } from './demo/DemoModeContext';
 import DemoModeToggle from './components/DemoModeToggle';
 import DemoBanner from './components/DemoBanner';
+import DemoAlertNotification from './components/DemoAlertNotification';
 import NavisAssistant from './components/NavisAssistant';
 import Overview from './pages/Overview';
 import FloodMap from './pages/FloodMap';
@@ -162,6 +163,7 @@ function AppLayout() {
       </header>
 
       <DemoBanner />
+      <DemoAlertNotification />
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Mobile overlay */}

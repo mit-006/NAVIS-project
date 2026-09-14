@@ -2,11 +2,19 @@
 
 ## Status
 
-* Current batch: 3 (dark-mode completion + Relocation Sites map UX)
-* Overall progress: Batch 1 done, Batch 2 mostly done (typography rollout to remaining pages still open), Batch 3 (this one) done for its stated scope, Batches "backend honesty"/4/5 not started
-* Current source/ZIP: navis-project-updated.zip (this file ships inside it, at repo root)
+* Current batch: 5 (demo flood-safety + global alert notification)
+* Overall progress: Batch 1 done, Batch 2 mostly done, Batch 3 dark-mode/map UX done, Batch 4 implemented; deeper backend/GIS/ML audit and remaining polish still open
+* Current source/ZIP: NAVIS-project-fix-hygiene-branding.zip
 * Last updated: this session
-* Branch: fix/hygiene-branding (local + pushed to fork, not merged upstream)
+* Branch: fix/hygiene-branding (ZIP has no .git; commit/push locally)
+
+## Batch 4 — Demo flood-safety + global alert notification
+
+* [x] Corrected live `site-c` demo coordinates from 26.155/91.680 to 26.205/91.668 and elevation 105→193; verified against `kamrup_metro_flood_exposure.geojson` as inside Agyathuri with 0 exposed years / 0.0% max exposure.
+* [x] Mirrored the coordinate/elevation correction in the unused `demoData.js` copy.
+* [x] Added a global in-app simulated-flood alert visible from any routed page while demo mode is active; clicking it navigates directly to `/map`.
+* [x] Alert state is owned by `DemoModeContext`, so it is not tied to FloodMap rendering.
+* [x] Kept existing siren/audio behavior and simulation logic unchanged.
 
 ## Architecture
 
@@ -46,14 +54,50 @@
 * [ ] Icon system — still generic inline SVG paths hardcoded in `App.jsx`
 * [ ] Batch 3: backend honesty fix — user has NOT yet chosen between (a) actually deploying/wiring the Python+Node backend for real GIS computation, or (b) rewriting README to honestly describe the actual static-data architecture and removing/labeling the unused stub code. Ask before proceeding. Prior recommendation given to user: option (b) is lower-risk this close to deadline.
 * [ ] Batch 4: flood exposure stats discrepancy — year-wise avg/max exposure % and population in current GeoJSON don't match an earlier "previously verified" reference set (record counts match, derived stats don't). Investigate `python-engine/scripts/calculate_flood_exposure.py` + `docs/data-requirements/`. Details in `internal/audit/flood_statistics_discrepancy_investigation.md` (local only, gitignored).
-* [ ] Batch 5: Methodology.jsx missing relocation-suitability section (only on RelocationSites.jsx); mobile responsive QA never done beyond desktop 1440px; bundle is ~1MB/290KB gzip (React.lazy code-splitting not applied); `navis-logo.png` (1.1MB) and `siren.mp3` (197KB) uncompressed; `HashRouter` could move to `BrowserRouter`+Vercel rewrites (optional, cosmetic URLs only); README repo link needs pointing to canonical `khushivadgama/...` repo instead of the `mit-006` fork
+* [ ] Batch 6: Methodology.jsx missing relocation-suitability section (only on RelocationSites.jsx); mobile responsive QA never done beyond desktop 1440px; bundle is ~1MB/290KB gzip (React.lazy code-splitting not applied); `navis-logo.png` (1.1MB) and `siren.mp3` (197KB) uncompressed; `HashRouter` could move to `BrowserRouter`+Vercel rewrites (optional, cosmetic URLs only); README repo link needs pointing to canonical `khushivadgama/...` repo instead of the `mit-006` fork
 * [ ] No security/CORS/input-validation review done yet — backend is non-functional stubs so this applies once/if Batch 3 wires it up for real
 * [ ] No automated tests exist for GIS/exposure/priority calculation logic — not yet assessed for what's worth testing
 * [ ] Full whole-repo audit requested by user (data correctness, GIS/CRS validity, ML validation numbers, leakage audit, Docker/CI, etc. per their new master-prompt) has NOT been performed yet — everything above came from a UI/repo-hygiene-focused audit, not the deeper scientific/data-pipeline review now being requested
 
+## Batch 5 — Global demo alert reliability + land-verified relocation markers (2026-09-14)
+
+### User-reported verification findings
+
+* Local production build passed, but browser testing showed the global simulated-flood alert was not visible from non-map pages.
+* Browser testing also showed multiple demo relocation markers visually positioned over blue water areas. The previous site-c fix was insufficient because the other synthetic site coordinates were also not grounded in the relocation-candidate geometry.
+
+### Root-cause fixes
+
+* `frontend/src/components/DemoAlertNotification.jsx` now renders through a React portal into `document.body`, uses a high stacking order (`z-[20000]`), and derives visibility directly from `demoMode`. This avoids route/overlay stacking-context issues and keeps the alert present on every routed page for the entire DEMO session. Clicking the alert navigates directly to `/map`.
+* Removed the now-unnecessary transient `demoAlertVisible` state from `DemoModeContext.jsx`; the notification lifecycle is now exactly the DEMO lifecycle instead of a second state machine.
+* `frontend/src/demo/demoEmergencyScenario.js` now uses representative points from the project's `preliminary_relocation_candidates.geojson` for all four simulated relocation markers:
+  * RC-025 Agyathuri — 26.205848, 91.667828 — 0 exposed years — elevation 193 m — suitability 56.85
+  * RC-029 No.2 Bonda Grant — 26.176986, 91.843815 — 0 exposed years — elevation 60 m — suitability 56.25
+  * RC-038 Kalitakuchi N.C. — 26.159718, 91.851107 — 0 exposed years — elevation 109 m — suitability 53.92
+  * RC-011 Bonda — 26.169489, 91.855334 — 0 exposed years — elevation 167 m — suitability 60.27
+* The four points were checked against the relocation-candidate GeoJSON geometry and are contained by candidate polygons whose `exposed_years` value is 0. This is a stronger placement basis than the previous arbitrary demo coordinates.
+* The legacy `demoData.js` mirror was updated so the stale site-c coordinate no longer remains.
+* Demo map popups now expose the candidate ID, historical exposed-year count, capacity, and elevation so the source basis is visible during the demo.
+* Demo route labels were changed from named real-road claims to `Simulated access route` because the current frontend does not have a live road-routing engine. This avoids presenting synthetic polylines as verified road navigation.
+
+### Verification status
+
+* [x] Frontend `npm run build` was successfully run by the user after Batch 4 changes: 703 modules transformed; production build completed.
+* [x] All four new relocation marker endpoints were verified against the project's relocation-candidate GeoJSON: candidate polygon contains point and `exposed_years=0`.
+* [ ] User must refresh/restart Vite after this Batch 5 code update and verify the global alert on Overview, Historical, Relocation, etc.
+* [ ] User must click the alert and verify URL becomes `/#/map`.
+* [ ] User must run the simulation and verify all relocation markers render on candidate land rather than water.
+* [ ] Re-run `npm run build` after Batch 5 changes.
+
+### Exact resume point
+
+* Current task: Batch 5 fixes for the two browser-confirmed demo problems: cross-page alert visibility and water-positioned relocation markers.
+* Next action: user refreshes local Vite app, enters DEMO from Overview, confirms alert is visible globally, clicks it to reach Flood Map, then runs the simulation and confirms all four candidate markers are on land.
+* If a marker still visually overlaps blue water after this change, do not move it arbitrarily again. Inspect the underlying candidate polygon/basemap geometry and correct the candidate selection or map rendering root cause.
+
 ## Changed Files
 
-58 files in Batch 1 (renames/moves/deletions, see git log message "Repo hygiene + brand consistency cleanup"), plus in Batch 2 (uncommitted as of this handoff, staged only in sandbox — user still needs to copy zip → commit locally): `tailwind.config.js`, `frontend/src/index.css`, `frontend/src/data/floodData.js`, `frontend/src/data/relocationData.js`, `frontend/index.html`, `frontend/src/App.jsx`, `frontend/src/pages/Overview.jsx`
+58 files in Batch 1 (renames/moves/deletions, see git log message "Repo hygiene + brand consistency cleanup"), plus Batch 2 UI/data-token changes, Batch 4 demo fixes, and Batch 5 demo reliability/GIS-placement fixes. Current Batch 5 files: `frontend/src/components/DemoAlertNotification.jsx`, `frontend/src/demo/DemoModeContext.jsx`, `frontend/src/demo/demoEmergencyScenario.js`, `frontend/src/demo/demoData.js`, `frontend/src/components/DemoMapOverlay.jsx`, `frontend/src/App.jsx`, `NAVIS_PROGRESS.md`.
 
 ## Technical/Data Decisions
 
@@ -73,25 +117,27 @@
 
 ## Verification
 
-* Build: `npm run build` in `frontend/` passes as of end of this batch (Batch 2 + Batch 3 dark-mode/map fixes)
-* Tests: no automated test suite exists
-* Lint/type-check: not run this session
-* Browser: not manually verified in this sandbox (no headless browser available here) — user must verify locally after copying: check Relocation Sites map now shows more usable area, dark mode on Relocation Sites (limitations banner, flood-history box, pending-validation box, KPI cards, score bars) reads correctly, light mode and other pages unaffected
-* API/data/GIS: not verified this session — flagged as open item (Batch 4, and the new full-repo audit request)
+* Build: Batch 4 build was verified locally by the user. Batch 5 build has not yet been run because frontend dependencies are not installed in this sandbox; run `npm run build` locally after copying Batch 5.
+* Tests: no automated test suite exists.
+* Lint/type-check: not configured/run.
+* Browser: not available here; locally verify demo alert on every page, click-to-map redirect, siren behavior, and relocation markers.
+* API/data/GIS: all 4 live demo site coordinates checked against `kamrup_metro_flood_exposure.geojson`; site-c now resolves to Agyathuri with 0 exposed years / 0.0% max exposure.
 
 ## Result Optimization Log
 
 | Change | Reason | Before | After | Validation | Trade-off |
 | ------ | ------ | ------ | ----- | ---------- | --------- |
-| Severity/priority color values changed | Visual design only — hex values for EXPOSURE_CATEGORIES/PRIORITY_LEVELS were stock Tailwind colors | `#dc2626`/`#ea580c`/etc. | Custom palette (`#A62B26` etc.) | Visual only, no change to thresholds, scoring logic, or which category a value falls into | None — cosmetic only, underlying min/max score boundaries untouched |
-
-No result-generating logic (scoring, thresholds, GIS calculations) has been touched yet. Everything above is UI/branding/repo-hygiene only.
+| Demo relocation markers | Several synthetic markers visually landed on water | Arbitrary facility coordinates | Four representative points from never-exposed relocation-candidate polygons | Candidate polygon containment + `exposed_years=0` | Demo endpoints now have a data-backed placement basis |
+| Global demo alert | Alert was not visible reliably above route/overlay layers | State flag + normal DOM render | Portal to `document.body`, `z-[20000]`, derived from `demoMode` | Code-level root-cause fix; browser verification pending | None |
+| Demo routes | Synthetic polylines were labeled as named real roads | Named road labels | `Simulated access route` | No live road-routing backend exists | Less specific but more honest demo labeling |
 
 ## Critical Components Reviewed
 
 * [x] Repo structure / hygiene
 * [x] Branding consistency
 * [x] Frontend visual design system (Tailwind config, colors, fonts)
+* [x] Demo relocation coordinates / flood-safety check — all four Batch 5 candidate endpoints verified against relocation-candidate polygons
+* [x] Global demo alert routing/state wiring — portal-based in Batch 5
 * [ ] Backend/API logic and security — reviewed only enough to confirm it's non-functional stubs, not reviewed for correctness/security in depth
 * [ ] Python/GIS processing scripts — not yet reviewed for correctness (CRS, geometry validity, spatial operations)
 * [ ] ML/statistical validation logic — not yet reviewed; metrics in this file's header are user-provided, unverified against code
@@ -110,25 +156,34 @@ No result-generating logic (scoring, thresholds, GIS calculations) has been touc
 
 ## EXACT RESUME POINT
 
-* Current task: dark-mode completion + Relocation Sites map UX fix — done for stated scope, packaged for handoff
-* Last action: Generated `navis-project-updated.zip` (all batches to date) and this progress file
-* Next action: (1) User copies zip to local repo, commits, pushes. (2) User must browser-verify the checklist above (dark mode on Relocation Sites, map area size, light mode intact, no regressions on other pages) since this sandbox has no browser. (3) Ask user to choose Batch 3-proper direction (wire up backend vs. honest README) before starting it. (4) Remaining open work: typography rollout to 7 pages, layout restructuring decision, OR pivot to the deeper full-stack/GIS/ML audit from the user's master-prompt — clarify priority with user.
-* Files/areas: see "Remaining" section above for the full list, organized by batch
-* Commands (Windows/PowerShell, user's established working pattern):
-  ```powershell
-  robocopy "C:\path\to\extracted\NAVIS-project" "C:\Users\ASUS\Downloads\project\NAVIS-project" /MIR /XD .git
-  cd "C:\Users\ASUS\Downloads\project\NAVIS-project"
-  git status
-  git add -A
-  git commit -m "<batch description>"
-  git push origin fix/hygiene-branding
-  ```
-* Verification: after copying, run `cd frontend; npm install; npm run dev` and manually check pages/dark-mode/chat assistant in browser before committing
+* Current task: Batch 5 global demo alert reliability + land-verified relocation markers — implemented, data-verified, browser verification pending.
+* Last action: moved all four demo relocation markers onto verified never-exposed relocation-candidate polygons, made the global alert portal-based and demo-state-driven, and updated this tracker.
+* Next action: refresh the local Vite app, verify the alert on multiple pages and click-to-map, verify all four relocation markers, then rebuild, commit, and push.
+* Files/areas: `frontend/src/demo/demoEmergencyScenario.js`, `frontend/src/demo/demoData.js`, `frontend/src/demo/DemoModeContext.jsx`, `frontend/src/components/DemoAlertNotification.jsx`, `frontend/src/components/DemoMapOverlay.jsx`, `frontend/src/App.jsx`.
+* Commands: see Windows workflow below.
+* Verification required: demo siren/alert, alert click → `/map`, relocation markers outside exposed polygons, build.
+
+## Windows workflow
+
+```powershell
+cd "C:\Users\ASUS\Downloads\project\NAVIS-project\frontend"
+npm install
+npm run build
+npm run dev
+```
+
+After browser verification:
+
+```powershell
+cd "C:\path\to\your\NAVIS-project"
+git status
+git add -A
+git commit -m "Fix demo flood safety and global alert"
+git push origin fix/hygiene-branding
+```
 
 ## SESSION HANDOFF
 
-NAVIS is a React/Vite frontend (deployed, static-data-driven) with non-functional Node/Python backend stubs (undeployed), for an SIH hackathon disaster-management tool now past an initial round, prepping for final selection. User (not very git-savvy, Windows/PowerShell only, limited turns per session) is working through a prioritized fix list across multiple sessions/accounts, staging all changes on their GitHub fork (`mit-006/NAVIS-project`, branch `fix/hygiene-branding`) without merging to the real team repo (`khushivadgama/...`) until a teammate does the final push at the end.
+NAVIS is a React/Vite static-data-driven frontend with non-functional Node/Python backend stubs. Work is staged on `mit-006/NAVIS-project`, branch `fix/hygiene-branding`; do not merge upstream early. User prefers Windows/PowerShell, full-ZIP + `robocopy /MIR`, concise communication, and a fresh updated `NAVIS_PROGRESS.md` after every meaningful batch.
 
-Batch 1 (repo hygiene, ResQMap→NAVIS rebrand) is fully done and already committed/pushed by the user. Batch 2 (custom design system: Tailwind theme, severity colors, brand re-skin, fonts) is partially done — verified building, but not yet copied/committed by the user, and several sub-items remain (typography on remaining pages, dark-mode cleanup, layout work). Batches 3-5 (backend honesty decision, flood-data discrepancy, misc polish) are not started.
-
-The user just supplied a much more extensive "master prompt" (uploaded as a document this turn) asking for a full-stack/GIS/ML/security/DevOps audit of the ENTIRE project — not just UI/hygiene — including verification of stated validation metrics (precision 86.33%, recall 42.18%, F1 56.67%, 17,100-check leakage audit with zero violations), GIS/CRS correctness, result traceability, and production-readiness across backend, database (none exists), Python/GIS pipeline, Docker/CI (none exists), and testing (none exists). This is a significantly larger scope than what's been done so far and has NOT been started. The next session should clarify with the user whether to keep finishing the current UI/hygiene-focused batch plan first, or pivot to this deeper audit — and should adopt the user's requested formats going forward: maintain this exact `NAVIS_PROGRESS.md` file at project root (not the previous `NAVIS_FIX_TRACKER.md` format used in earlier sessions), and report each batch tersely using DONE / CHANGED / VERIFIED / BLOCKERS / NEXT headers with no extra narration, per the user's explicit instructions.
+Batch 5 addresses browser-confirmed demo issues: the global simulated-flood alert now portals to `document.body` and derives directly from `demoMode`, and all four relocation markers now use verified never-exposed candidate polygons from `preliminary_relocation_candidates.geojson`. Browser verification and a final Batch 5 build remain pending. The deeper full-repo scientific/GIS/ML/backend audit is still not started.
