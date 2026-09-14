@@ -768,3 +768,61 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .navis-overview-intro { position:relative; overflow:hidden; border:1px solid var(--border-primary); background:linear-gradient(135deg,#f5f8f8,#ffffff 60%,#edf5f6); }
 .navis-overview-intro:after { content:""; position:absolute; right:-80px; top:-80px; width:340px; height:340px; border-radius:50%; border:1px solid rgba(47,127,146,.12); box-shadow:0 0 0 40px rgba(47,127,146,.025),0 0 0 80px rgba(47,127,146,.02); pointer-events:none; }
 .dark .navis-overview-intro { background:linear-gradient(135deg,#0b1a21,#0e222b); }
+
+
+/* Batch 12a: keep demo UI below the site chrome and make live weather a first-class map panel. */
+.navis-demo-alert {
+  top: 162px;
+}
+
+.navis-weather-compact {
+  width: min(330px, calc(100vw - 24px));
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(8, 24, 32, 0.16);
+  backdrop-filter: blur(8px);
+}
+
+.navis-weather-compact .navis-weather-compact-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+}
+
+.navis-weather-compact > div:first-child {
+  margin-bottom: 8px;
+}
+
+.navis-weather-compact > div:nth-child(2) {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.navis-weather-compact > div:nth-child(2) > div {
+  padding: 7px;
+  border-radius: 5px;
+}
+
+.navis-weather-compact > div:nth-child(2) > div p:nth-child(2) {
+  font-size: 13px;
+}
+
+.navis-weather-compact > div:last-child {
+  margin-top: 8px;
+  padding-top: 7px;
+}
+
+@media (max-width: 640px) {
+  .navis-demo-alert {
+    top: 150px;
+    right: 12px;
+  }
+
+  .navis-weather-compact {
+    width: min(300px, calc(100vw - 24px));
+  }
+
+  .navis-weather-compact > div:nth-child(2) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

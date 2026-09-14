@@ -179,8 +179,6 @@ export default function HabitationComparisonPanel({ features, onClose, onSelectH
                   <MetricRow label="Population" valueA={comparison.populationA.toLocaleString()} valueB={comparison.populationB.toLocaleString()} higherIsBetter={false} colors={c} />
                   <MetricRow label="Households" valueA={comparison.householdsA.toLocaleString()} valueB={comparison.householdsB.toLocaleString()} higherIsBetter={false} colors={c} />
                   <MetricRow label="Children" valueA={comparison.childrenA.toLocaleString()} valueB={comparison.childrenB.toLocaleString()} higherIsBetter={false} colors={c} />
-                  <MetricRow label="SC Pop" valueA={comparison.scPopA.toLocaleString()} valueB={comparison.scPopB.toLocaleString()} higherIsBetter={false} colors={c} />
-                  <MetricRow label="ST Pop" valueA={comparison.stPopA.toLocaleString()} valueB={comparison.stPopB.toLocaleString()} higherIsBetter={false} colors={c} />
                 </div>
 
                 {/* Historical comparison */}
@@ -300,8 +298,6 @@ export default function HabitationComparisonPanel({ features, onClose, onSelectH
                     <MetricRow label="Population" valueA={comparison.populationA.toLocaleString()} valueB={comparison.populationB.toLocaleString()} higherIsBetter={false} colors={c} />
                     <MetricRow label="Households" valueA={comparison.householdsA.toLocaleString()} valueB={comparison.householdsB.toLocaleString()} higherIsBetter={false} colors={c} />
                     <MetricRow label="Children" valueA={comparison.childrenA.toLocaleString()} valueB={comparison.childrenB.toLocaleString()} higherIsBetter={false} colors={c} />
-                    <MetricRow label="SC Pop" valueA={comparison.scPopA.toLocaleString()} valueB={comparison.scPopB.toLocaleString()} higherIsBetter={false} colors={c} />
-                    <MetricRow label="ST Pop" valueA={comparison.stPopA.toLocaleString()} valueB={comparison.stPopB.toLocaleString()} higherIsBetter={false} colors={c} />
                   </div>
                 </div>
 

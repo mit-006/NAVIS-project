@@ -569,7 +569,7 @@ function KPICard({ label, value, color, sub }) {
   return (
     <div className={`rounded-xl shadow-sm border p-4 ${colorMap[color] || colorMap.blue}`}>
       <p className="text-xs font-semibold uppercase tracking-wider opacity-70">{label}</p>
-      <p className="text-3xl font-bold mt-1">{value}</p>
+      <p className="text-3xl font-bold mt-1 stat-number">{value}</p>
       {sub && <p className="text-xs mt-0.5 opacity-60">{sub}</p>}
     </div>
   );

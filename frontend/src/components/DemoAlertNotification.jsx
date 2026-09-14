@@ -20,7 +20,7 @@ export default function DemoAlertNotification() {
     <button
       type="button"
       onClick={openFloodSimulation}
-      className="fixed top-[88px] right-4 z-[20000] w-[min(390px,calc(100vw-2rem))] rounded-xl border-2 border-red-500/50 bg-white p-4 text-left shadow-2xl shadow-red-900/20 transition hover:-translate-y-0.5 hover:shadow-red-500/20 dark:bg-[#11181b]"
+      className="fixed navis-demo-alert right-4 z-[20000] w-[min(390px,calc(100vw-2rem))] rounded-xl border-2 border-red-500/50 bg-white p-4 text-left shadow-2xl shadow-red-900/20 transition hover:-translate-y-0.5 hover:shadow-red-500/20 dark:bg-[#11181b]"
       aria-label="Open NAVIS flood simulation"
     >
       <div className="flex items-start gap-3">

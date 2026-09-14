@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { fetchCurrentWeather, getConditionSeverity, getWindDirectionLabel } from '../services/weatherService';
 
-function SkeletonCard() {
+function SkeletonCard({ compact = false }) {
   return (
-    <div className="rounded-xl border p-4 md:p-5" style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border-primary)' }}>
+    <div className={`rounded-xl border ${compact ? 'navis-weather-compact' : 'p-4 md:p-5'}`} style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border-primary)' }}>
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>Current Conditions</p>
+          <p className="text-[10px] font-semibold uppercase tracking-wider">Live Weather</p>
           <p className="text-xs mt-0.5" style={{ color: 'var(--text-tertiary)' }}>Loading current weather...</p>
         </div>
         <div className="w-8 h-8 rounded-lg animate-pulse" style={{ background: 'var(--border-secondary)' }} />
@@ -23,9 +23,9 @@ function SkeletonCard() {
   );
 }
 
-function ErrorCard({ onRetry }) {
+function ErrorCard({ onRetry, compact = false }) {
   return (
-    <div className="rounded-xl border p-4 md:p-5" style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border-primary)' }}>
+    <div className={`rounded-xl border ${compact ? 'navis-weather-compact' : 'p-4 md:p-5'}`} style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border-primary)' }}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(240,176,26,0.12)' }}>
@@ -42,7 +42,7 @@ function ErrorCard({ onRetry }) {
   );
 }
 
-function WeatherCard({ weather, onRefresh, refreshing }) {
+function WeatherCard({ weather, onRefresh, refreshing, compact = false }) {
   const severity = getConditionSeverity(weather.weatherCode);
 
   const bgMap = {
@@ -65,15 +65,15 @@ function WeatherCard({ weather, onRefresh, refreshing }) {
   };
 
   return (
-    <div className="rounded-xl border p-4 md:p-5 transition-shadow hover:shadow-sm" style={{ background: 'var(--bg-secondary)', borderColor: borderMap[severity], ...(severity !== 'normal' ? { background: bgMap[severity] } : {}) }}>
+    <div className={`rounded-xl border transition-shadow hover:shadow-sm ${compact ? 'navis-weather-compact' : 'p-4 md:p-5'}`} style={{ background: 'var(--bg-secondary)', borderColor: borderMap[severity], ...(severity !== 'normal' ? { background: bgMap[severity] } : {}) }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style={{ background: `${accentMap[severity]}12` }}>
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg ${compact ? 'navis-weather-compact-icon' : ''}`} style={{ background: `${accentMap[severity]}12` }}>
             {weather.conditionIcon}
           </div>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>Current Conditions</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>Live Weather</p>
             <p className="text-xs font-semibold" style={{ color: accentMap[severity] }}>{weather.conditionLabel}</p>
           </div>
         </div>
@@ -87,7 +87,7 @@ function WeatherCard({ weather, onRefresh, refreshing }) {
       </div>
 
       {/* Metrics grid */}
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className={`grid grid-cols-2 gap-2.5 ${compact ? 'navis-weather-compact-metrics' : ''}`}>
         <MetricBox label="Temperature" value={`${weather.temperature}°C`} />
         <MetricBox label="Rainfall" value={weather.rain > 0 ? `${weather.rain} mm` : '0 mm'} highlight={weather.rain > 10} />
         <MetricBox label="Humidity" value={`${weather.humidity}%`} highlight={weather.humidity > 85} />
@@ -119,7 +119,7 @@ function MetricBox({ label, value, sub, highlight }) {
 
 const REFRESH_INTERVAL = 5 * 60 * 1000;
 
-export default function CurrentConditions() {
+export default function CurrentConditions({ compact = false }) {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -160,9 +160,9 @@ export default function CurrentConditions() {
     };
   }, [load]);
 
-  if (loading) return <SkeletonCard />;
-  if (error && !weather) return <ErrorCard onRetry={() => load(false)} />;
+  if (loading) return <SkeletonCard compact={compact} />;
+  if (error && !weather) return <ErrorCard onRetry={() => load(false)} compact={compact} />;
   if (!weather) return null;
 
-  return <WeatherCard weather={weather} onRefresh={() => load(true)} refreshing={refreshing} />;
+  return <WeatherCard weather={weather} onRefresh={() => load(true)} refreshing={refreshing} compact={compact} />;
 }

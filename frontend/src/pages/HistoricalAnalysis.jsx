@@ -46,7 +46,7 @@ export default function HistoricalAnalysis({ features, allStats }) {
     <div className="h-full overflow-y-auto">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6">
         <div className="mb-4 md:mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900">Historical Flood Analysis</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 font-display">Historical Flood Analysis</h2>
           <p className="text-sm text-gray-500 mt-1">Year-wise comparison of flood exposure across 228 habitations in Kamrup Metropolitan</p>
         </div>
 

@@ -179,3 +179,47 @@ git push origin fix/hygiene-branding
 * [ ] If approved, port the chosen shell into the canonical `NAVIS-project` while preserving all existing functionality.
 * [ ] Fix the simulated-alert dismissal behavior after the design is locked.
 * [ ] Run full responsive/browser QA, then commit the final redesign.
+
+## Batch 11 — Theme consistency rollout (on main branch)
+
+### DONE
+
+* [x] Worked directly from `main` (per user instruction — main has structural/hero changes not present on `fix/hygiene-branding`; treated `main` as source of truth going forward).
+* [x] Applied `.font-display` (Space Grotesk) to the 5 page titles that didn't have it: FloodMap, HabitationExplorer, PriorityAnalysis, HistoricalAnalysis, Methodology.
+* [x] Applied `.stat-number` to Relocation Sites' shared KPICard value display.
+* [x] Full repo sweep for dark-mode color-class coverage gaps (amber/yellow/orange/green/gray/slate families) — confirmed everything already covered, no gaps found on this branch.
+* [x] Confirmed brand/severity tokens, blue-family global re-skin, map sizing fix, and demo relocation-site fix are all already present and correct on `main`.
+
+### VERIFIED
+
+* `npm run build` passes (704 modules).
+* Not browser-verified in sandbox — user must check visually.
+
+### NOTE ON BRANCHES
+
+`main` and `fix/hygiene-branding` have diverged — `main` has a different/simpler Overview hero treatment (`navis-overview-intro` styling) than `fix/hygiene-branding`'s (`hero-cosmos`/`RainEffect`). Per user instruction, `main` is now being treated as the working branch. Future sessions should confirm with the user which branch is current before assuming — check both if unsure.
+## Batch 12a — Demo overlay, comparison, and live-weather UX fixes
+
+### DONE
+
+* [x] Kept the current approved NAVIS visual design and focused only on the reported functional/UI bugs.
+* [x] Anchored the Demo Control Panel to the Flood Map workspace so it no longer positions itself behind/inside the site header layer.
+* [x] Moved the simulated alert notification below the fixed site chrome to prevent header/notification stacking collisions.
+* [x] Removed SC Pop and ST Pop from the Habitation Comparison presentation while preserving the underlying comparison data and calculations.
+* [x] Replaced the small Flood Map "Live Weather" status badge with the actual `CurrentConditions` live-weather component in the map's right-side information stack.
+* [x] Added a compact presentation variant for the live-weather component without changing its weather service or refresh behavior.
+
+### PRESERVATION
+
+* [x] No flood GeoJSON, scoring formulas, relocation logic, alert logic, weather service, route structure, or backend logic was intentionally changed.
+* [x] SC/ST comparison values remain available in the underlying comparison calculation for compatibility; only their UI rows were removed as requested.
+
+### VERIFICATION
+
+* [ ] User browser verification pending.
+* [ ] `npm run build` pending on the user's Windows environment.
+
+### NEXT
+
+* [ ] If browser QA is clean, align/verify backend integration and then commit/push the approved state.
+
