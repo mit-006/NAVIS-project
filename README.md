@@ -3,7 +3,7 @@
 
 **Live Demo:** [https://navis-project-gray.vercel.app/]
 
-**GitHub Repository:** https://github.com/mit-006/NAVIS-project
+**GitHub Repository:** https://github.com/mit-006/NAVIS-project/tree/ui-refinement-batch12
 
 ---
 
